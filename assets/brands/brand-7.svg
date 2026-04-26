@@ -1,0 +1,8 @@
+<svg viewBox="0 0 115 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="115" height="32">
+  <!-- Lumina wordmark -->
+  <path d="M12,8 L12,22 L20,22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="12" cy="8" r="3" fill="white" opacity=".9"/>
+  <circle cx="12" cy="8" r="6" fill="none" stroke="white" stroke-width="1" opacity=".3"/>
+  <circle cx="12" cy="8" r="9" fill="none" stroke="white" stroke-width="0.5" opacity=".15"/>
+  <text x="26" y="21" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="white" letter-spacing="-0.2">Lumina</text>
+</svg>

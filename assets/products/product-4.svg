@@ -1,0 +1,32 @@
+<svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" width="160" height="160">
+  <defs>
+    <linearGradient id="pa4g1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#B8A9F5" stop-opacity=".6"/>
+      <stop offset="100%" stop-color="#B8A9F5" stop-opacity=".1"/>
+    </linearGradient>
+    <linearGradient id="pa4g2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5ECFA8" stop-opacity=".5"/>
+      <stop offset="100%" stop-color="#5ECFA8" stop-opacity=".1"/>
+    </linearGradient>
+  </defs>
+  <circle cx="80" cy="80" r="68" stroke="rgba(184,169,245,.25)" stroke-width="1"/>
+  <circle cx="80" cy="80" r="52" stroke="rgba(94,207,168,.2)"   stroke-width="1"/>
+  <g transform="translate(80,80)">
+    <ellipse rx="14" ry="38" fill="url(#pa4g1)" transform="rotate(0)"   opacity=".8"/>
+    <ellipse rx="14" ry="38" fill="url(#pa4g2)" transform="rotate(45)"  opacity=".7"/>
+    <ellipse rx="14" ry="38" fill="url(#pa4g1)" transform="rotate(90)"  opacity=".8"/>
+    <ellipse rx="14" ry="38" fill="url(#pa4g2)" transform="rotate(135)" opacity=".7"/>
+    <ellipse rx="14" ry="38" fill="url(#pa4g1)" transform="rotate(180)" opacity=".8"/>
+    <ellipse rx="14" ry="38" fill="url(#pa4g2)" transform="rotate(225)" opacity=".7"/>
+    <ellipse rx="14" ry="38" fill="url(#pa4g1)" transform="rotate(270)" opacity=".8"/>
+    <ellipse rx="14" ry="38" fill="url(#pa4g2)" transform="rotate(315)" opacity=".7"/>
+  </g>
+  <circle cx="80" cy="80" r="14" fill="rgba(184,169,245,.2)" stroke="rgba(184,169,245,.7)" stroke-width="1.5"/>
+  <circle cx="80" cy="80" r="5"  fill="#B8A9F5" opacity=".9"/>
+  <g transform="translate(80,80)" stroke="rgba(94,207,168,.5)" stroke-width="1" fill="none">
+    <polygon points="0,-28 8,-20 0,-12 -8,-20" transform="rotate(0)"/>
+    <polygon points="0,-28 8,-20 0,-12 -8,-20" transform="rotate(45)"/>
+    <polygon points="0,-28 8,-20 0,-12 -8,-20" transform="rotate(90)"/>
+    <polygon points="0,-28 8,-20 0,-12 -8,-20" transform="rotate(135)"/>
+  </g>
+</svg>

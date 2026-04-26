@@ -1,0 +1,45 @@
+<svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg" width="400" height="300">
+  <!-- Cubo Infinito — product photography mockup -->
+  <defs>
+    <radialGradient id="g2bg" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#111B2A"/>
+      <stop offset="100%" stop-color="#050509"/>
+    </radialGradient>
+    <radialGradient id="g2glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#85CFFF" stop-opacity=".22"/>
+      <stop offset="100%" stop-color="#85CFFF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="g2blur"><feGaussianBlur stdDeviation="20"/></filter>
+    <linearGradient id="g2top" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5ECFA8" stop-opacity=".7"/>
+      <stop offset="100%" stop-color="#5ECFA8" stop-opacity=".25"/>
+    </linearGradient>
+    <linearGradient id="g2left" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#85CFFF" stop-opacity=".55"/>
+      <stop offset="100%" stop-color="#85CFFF" stop-opacity=".2"/>
+    </linearGradient>
+    <linearGradient id="g2right" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#B8A9F5" stop-opacity=".65"/>
+      <stop offset="100%" stop-color="#B8A9F5" stop-opacity=".2"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#g2bg)"/>
+  <ellipse cx="200" cy="150" rx="150" ry="110" fill="url(#g2glow)" filter="url(#g2blur)"/>
+  <!-- Shadow -->
+  <ellipse cx="200" cy="235" rx="90" ry="14" fill="#85CFFF" opacity=".07"/>
+  <!-- Isometric cube scaled up -->
+  <g transform="translate(200,145) scale(3)">
+    <polygon points="0,-37 36,-18 0,1 -36,-18" fill="url(#g2top)" stroke="#5ECFA8" stroke-width="1" stroke-linejoin="round"/>
+    <polygon points="-36,-18 0,1 0,51 -36,32" fill="url(#g2left)" stroke="#85CFFF" stroke-width="1" stroke-linejoin="round"/>
+    <polygon points="0,1 36,-18 36,32 0,51" fill="url(#g2right)" stroke="#B8A9F5" stroke-width="1" stroke-linejoin="round"/>
+    <g stroke-dasharray="4,3" stroke-width=".7" opacity=".6">
+      <line x1="0" y1="1" x2="0" y2="-37" stroke="#5ECFA8"/>
+      <line x1="0" y1="1" x2="-36" y2="-18" stroke="#85CFFF"/>
+      <line x1="0" y1="1" x2="36" y2="-18" stroke="#B8A9F5"/>
+    </g>
+    <circle cx="0"  cy="-37" r="3" fill="#5ECFA8" opacity=".9"/>
+    <circle cx="36" cy="-18" r="2.5" fill="#B8A9F5" opacity=".8"/>
+    <circle cx="-36" cy="-18" r="2.5" fill="#85CFFF" opacity=".8"/>
+  </g>
+  <text x="200" y="276" font-family="system-ui,sans-serif" font-size="11" fill="rgba(255,255,255,.4)" text-anchor="middle" letter-spacing="2">CUBO INFINITO ANTIESTRESSE</text>
+</svg>

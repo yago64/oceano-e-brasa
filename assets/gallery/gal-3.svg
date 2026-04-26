@@ -1,0 +1,36 @@
+<svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg" width="400" height="300">
+  <!-- Caracol Articulado — product photography mockup -->
+  <defs>
+    <radialGradient id="g3bg" cx="40%" cy="45%" r="70%">
+      <stop offset="0%" stop-color="#1A1525"/>
+      <stop offset="100%" stop-color="#050509"/>
+    </radialGradient>
+    <radialGradient id="g3glow" cx="45%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#B8A9F5" stop-opacity=".2"/>
+      <stop offset="100%" stop-color="#B8A9F5" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="g3grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5ECFA8"/>
+      <stop offset="45%" stop-color="#85CFFF"/>
+      <stop offset="100%" stop-color="#B8A9F5"/>
+    </linearGradient>
+    <filter id="g3blur"><feGaussianBlur stdDeviation="20"/></filter>
+  </defs>
+  <rect width="400" height="300" fill="url(#g3bg)"/>
+  <ellipse cx="190" cy="150" rx="160" ry="110" fill="url(#g3glow)" filter="url(#g3blur)"/>
+  <!-- Shadow -->
+  <ellipse cx="195" cy="238" rx="80" ry="12" fill="#B8A9F5" opacity=".07"/>
+  <!-- Spiral scaled up, centered -->
+  <g transform="translate(200,145)">
+    <path d="M0,0 C0,-24 24,-48 48,-48 C72,-48 88,-24 88,8 C88,52 56,88 16,96 C-32,106 -72,78 -80,36 C-90,-18 -44,-70 -4,-76 C44,-84 88,-36 90,8"
+      stroke="url(#g3grad)" stroke-width="4.5" stroke-linecap="round" opacity=".88"/>
+    <circle cx="0"   cy="0"   r="8"   fill="#5ECFA8" opacity=".9"/>
+    <circle cx="48"  cy="-48" r="7"   fill="#85CFFF" opacity=".8"/>
+    <circle cx="88"  cy="8"   r="6.5" fill="#B8A9F5" opacity=".8"/>
+    <circle cx="16"  cy="96"  r="6"   fill="#5ECFA8" opacity=".7"/>
+    <circle cx="-80" cy="36"  r="6"   fill="#FFB085" opacity=".7"/>
+    <circle cx="0"   cy="0"   r="18"  fill="#5ECFA8" opacity=".06"/>
+    <circle cx="0"   cy="0"   r="6"   fill="#5ECFA8" opacity=".7"/>
+  </g>
+  <text x="200" y="276" font-family="system-ui,sans-serif" font-size="11" fill="rgba(255,255,255,.4)" text-anchor="middle" letter-spacing="2">CARACOL ARTICULADO</text>
+</svg>

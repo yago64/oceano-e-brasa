@@ -1,0 +1,7 @@
+<svg viewBox="0 0 100 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="100" height="32">
+  <!-- Orbital wordmark -->
+  <ellipse cx="12" cy="16" rx="10" ry="6" fill="none" stroke="white" stroke-width="1.5"/>
+  <ellipse cx="12" cy="16" rx="10" ry="6" fill="none" stroke="white" stroke-width="1.5" transform="rotate(60 12 16)"/>
+  <circle cx="12" cy="16" r="2.5" fill="white"/>
+  <text x="28" y="21" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="white" letter-spacing="-0.2">Orbital</text>
+</svg>

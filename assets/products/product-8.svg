@@ -1,0 +1,39 @@
+<svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" width="160" height="160">
+  <defs>
+    <radialGradient id="pa8bg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#5ECFA8" stop-opacity=".1"/>
+      <stop offset="100%" stop-color="#B8A9F5" stop-opacity=".05"/>
+    </radialGradient>
+    <filter id="pa8g">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <circle cx="80" cy="80" r="74" fill="url(#pa8bg)" stroke="rgba(94,207,168,.12)" stroke-width="1"/>
+  <g transform="translate(22,20) scale(0.48)">
+    <polygon points="45,5 80,22 45,39 10,22" fill="rgba(94,207,168,.25)" stroke="#5ECFA8" stroke-width="2" stroke-linejoin="round"/>
+    <polygon points="10,22 45,39 45,74 10,57" fill="rgba(133,207,255,.2)" stroke="#85CFFF" stroke-width="2" stroke-linejoin="round"/>
+    <polygon points="45,39 80,22 80,57 45,74" fill="rgba(184,169,245,.25)" stroke="#B8A9F5" stroke-width="2" stroke-linejoin="round"/>
+  </g>
+  <g transform="translate(98,16) scale(.36)">
+    <circle cx="20" cy="24" r="14" stroke="#5ECFA8" stroke-width="2" fill="rgba(94,207,168,.12)"/>
+    <circle cx="54" cy="24" r="14" stroke="#B8A9F5" stroke-width="2" fill="rgba(184,169,245,.12)"/>
+    <circle cx="37" cy="48" r="14" stroke="#FFB085" stroke-width="2" fill="rgba(255,176,133,.12)"/>
+    <circle cx="71" cy="48" r="14" stroke="#5ECFA8" stroke-width="2" fill="rgba(94,207,168,.12)"/>
+    <circle cx="20" cy="72" r="14" stroke="#FF8585" stroke-width="2" fill="rgba(255,133,133,.12)"/>
+    <circle cx="54" cy="72" r="14" stroke="#85CFFF" stroke-width="2" fill="rgba(133,207,255,.12)"/>
+  </g>
+  <g transform="translate(80,90)">
+    <g fill-opacity=".2" stroke-width="1">
+      <ellipse rx="9" ry="22" fill="#B8A9F5" stroke="#B8A9F5" transform="rotate(0)"/>
+      <ellipse rx="9" ry="22" fill="#5ECFA8" stroke="#5ECFA8" transform="rotate(45)"/>
+      <ellipse rx="9" ry="22" fill="#B8A9F5" stroke="#B8A9F5" transform="rotate(90)"/>
+      <ellipse rx="9" ry="22" fill="#5ECFA8" stroke="#5ECFA8" transform="rotate(135)"/>
+    </g>
+    <circle r="6" fill="rgba(184,169,245,.5)" stroke="#B8A9F5" stroke-width="1.2"/>
+    <circle r="2.5" fill="#B8A9F5"/>
+  </g>
+  <path d="M55,55 Q80,70 80,85" stroke="rgba(94,207,168,.25)" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <path d="M108,55 Q92,68 80,85" stroke="rgba(184,169,245,.25)" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <circle cx="80" cy="80" r="30" fill="rgba(94,207,168,.04)" filter="url(#pa8g)"/>
+</svg>
