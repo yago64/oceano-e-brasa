@@ -6,329 +6,526 @@
 <title>SensoPrint — Brinquedos 3D Sensoriais</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --mint: #5ECFA8;
-    --mint-light: #A8EDD4;
-    --lavender: #B8A9F5;
-    --peach: #FFB085;
-    --sky: #85CFFF;
-    --sand: #FFF4E0;
-    --coral: #FF8585;
-    --dark: #1E1E2E;
-    --dark2: #2A2A3E;
-    --text: #F0EFF8;
-    --muted: #9B98C0;
-    --card-bg: rgba(255,255,255,0.06);
-    --border: rgba(255,255,255,0.12);
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior:smooth; }
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--dark);
-    color: var(--text);
-    overflow-x: hidden;
-  }
+/* ═══ TOKENS ═══ */
+:root {
+  --mint:     #5ECFA8;
+  --lavender: #B8A9F5;
+  --peach:    #FFB085;
+  --sky:      #85CFFF;
+  --coral:    #FF8585;
+  --green:    #25D366;
+  --dark:     #1E1E2E;
+  --dark2:    #2A2A3E;
+  --dark3:    #14141F;
+  --text:     #F0EFF8;
+  --muted:    #9B98C0;
+  --card-bg:  rgba(255,255,255,0.06);
+  --border:   rgba(255,255,255,0.12);
+  --spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Nunito',sans-serif; background:var(--dark); color:var(--text); overflow-x:hidden; }
+button, input, select, textarea { font-family:inherit; }
 
-  /* NAV */
-  nav {
-    position: fixed; top:0; left:0; right:0; z-index:100;
-    display: flex; align-items:center; justify-content:space-between;
-    padding: 14px 32px;
-    background: rgba(30,30,46,0.85);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-  }
-  .logo {
-    font-family: 'Baloo 2', cursive;
-    font-size: 1.6rem; font-weight:800;
-    background: linear-gradient(135deg, var(--mint), var(--lavender));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .nav-links { display:flex; gap:24px; list-style:none; }
-  .nav-links a {
-    color: var(--muted); text-decoration:none; font-weight:600; font-size:.93rem;
-    transition: color .2s;
-  }
-  .nav-links a:hover { color: var(--mint); }
-  .cart-btn {
-    position:relative; background: linear-gradient(135deg,var(--mint),var(--lavender));
-    border:none; border-radius:50px; padding:8px 20px;
-    color:#1E1E2E; font-weight:800; font-size:.93rem; cursor:pointer;
-    display:flex; align-items:center; gap:8px; transition: transform .15s, box-shadow .15s;
-  }
-  .cart-btn:hover { transform:scale(1.05); box-shadow: 0 6px 24px rgba(94,207,168,.35); }
-  .cart-count {
-    background: var(--coral); color:#fff; border-radius:50%;
-    width:20px; height:20px; display:flex; align-items:center; justify-content:center;
-    font-size:.75rem; font-weight:900;
-  }
+/* ═══ NAV ═══ */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 32px;
+  background:rgba(30,30,46,0.92);
+  backdrop-filter:blur(20px) saturate(1.5);
+  border-bottom:1px solid var(--border);
+}
+.logo {
+  font-family:'Baloo 2',cursive; font-size:1.6rem; font-weight:800;
+  background:linear-gradient(135deg,var(--mint),var(--lavender));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+.nav-links { display:flex; gap:24px; list-style:none; }
+.nav-links a {
+  color:var(--muted); text-decoration:none; font-weight:600; font-size:.93rem;
+  transition:color .2s; position:relative;
+}
+.nav-links a::after {
+  content:''; position:absolute; bottom:-3px; left:0; right:0;
+  height:2px; background:var(--mint); transform:scaleX(0);
+  transition:transform .25s var(--spring); transform-origin:left;
+}
+.nav-links a:hover { color:var(--mint); }
+.nav-links a:hover::after { transform:scaleX(1); }
+.cart-btn {
+  position:relative; background:linear-gradient(135deg,var(--mint),var(--lavender));
+  border:none; border-radius:50px; padding:8px 20px;
+  color:#1E1E2E; font-weight:800; font-size:.93rem; cursor:pointer;
+  display:flex; align-items:center; gap:8px;
+  transition:transform .15s var(--spring), box-shadow .15s;
+  overflow:hidden;
+}
+.cart-btn:hover { transform:scale(1.06); box-shadow:0 6px 24px rgba(94,207,168,.4); }
+.cart-btn:active { transform:scale(.96); }
+.cart-count {
+  background:var(--coral); color:#fff; border-radius:50%;
+  width:22px; height:22px; display:flex; align-items:center; justify-content:center;
+  font-size:.75rem; font-weight:900; transition:transform .15s;
+}
+@keyframes cartBounce {
+  0%   { transform:scale(1); }
+  30%  { transform:scale(1.6) rotate(-8deg); }
+  65%  { transform:scale(.85) rotate(4deg); }
+  100% { transform:scale(1) rotate(0); }
+}
+.cart-count.bounce { animation:cartBounce .5s var(--spring); }
 
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display:flex; align-items:center; justify-content:center;
-    text-align:center;
-    padding: 100px 32px 60px;
-    position:relative; overflow:hidden;
-  }
-  .hero-bg {
-    position:absolute; inset:0; z-index:0;
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(94,207,168,.18) 0%, transparent 70%),
-                radial-gradient(ellipse 50% 50% at 80% 80%, rgba(184,169,245,.15) 0%, transparent 60%),
-                radial-gradient(ellipse 40% 40% at 20% 70%, rgba(255,176,133,.1) 0%, transparent 60%);
-  }
-  .blobs { position:absolute; inset:0; z-index:0; pointer-events:none; }
-  .blob {
-    position:absolute; border-radius:50%;
-    filter: blur(60px); opacity:.25; animation: blobFloat 8s ease-in-out infinite;
-  }
-  .blob1 { width:350px;height:350px;background:var(--mint);top:-80px;left:-80px;animation-delay:0s; }
-  .blob2 { width:280px;height:280px;background:var(--lavender);top:50%;right:-60px;animation-delay:-3s; }
-  .blob3 { width:200px;height:200px;background:var(--peach);bottom:60px;left:30%;animation-delay:-5s; }
-  @keyframes blobFloat { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(30px,-20px) scale(1.05)} }
+/* ═══ HERO ═══ */
+.hero {
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  text-align:center; padding:100px 32px 60px; position:relative; overflow:hidden;
+}
+.hero-bg {
+  position:absolute; inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(94,207,168,.18) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 80% 80%, rgba(184,169,245,.15) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 20% 70%, rgba(255,176,133,.1) 0%, transparent 60%);
+}
+.blobs { position:absolute; inset:0; z-index:0; pointer-events:none; }
+.blob { position:absolute; border-radius:50%; filter:blur(60px); opacity:.22; animation:blobFloat 8s ease-in-out infinite; }
+.blob1 { width:350px;height:350px;background:var(--mint);top:-80px;left:-80px;animation-delay:0s; }
+.blob2 { width:280px;height:280px;background:var(--lavender);top:50%;right:-60px;animation-delay:-3s; }
+.blob3 { width:200px;height:200px;background:var(--peach);bottom:60px;left:30%;animation-delay:-5s; }
+@keyframes blobFloat { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(30px,-20px) scale(1.06)} }
+.hero-content { position:relative; z-index:1; max-width:760px; }
+.hero-badge {
+  display:inline-block; background:rgba(94,207,168,.15);
+  border:1px solid var(--mint); color:var(--mint);
+  border-radius:50px; padding:6px 18px; font-size:.82rem; font-weight:700;
+  margin-bottom:20px; letter-spacing:.06em; text-transform:uppercase;
+  animation:badgePop .6s var(--spring) .2s both;
+}
+@keyframes badgePop { from{opacity:0;transform:scale(.8) translateY(10px)} to{opacity:1;transform:scale(1) translateY(0)} }
+.hero h1 {
+  font-family:'Baloo 2',cursive; font-size:clamp(2.6rem,6vw,4.5rem);
+  font-weight:800; line-height:1.1; margin-bottom:20px;
+  animation:slideUp .7s var(--ease-out) .3s both;
+}
+.hero h1 span { background:linear-gradient(135deg,var(--mint),var(--lavender)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+.hero p { color:var(--muted); font-size:1.15rem; line-height:1.7; margin-bottom:36px; animation:slideUp .7s var(--ease-out) .4s both; }
+.hero-btns { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; animation:slideUp .7s var(--ease-out) .5s both; }
+@keyframes slideUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+.floaters { position:absolute; inset:0; pointer-events:none; z-index:0; }
+.floater { position:absolute; font-size:2.5rem; opacity:.13; animation:floatUp 6s ease-in-out infinite; }
+@keyframes floatUp { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-20px) rotate(10deg)} }
 
-  .hero-content { position:relative; z-index:1; max-width:760px; }
-  .hero-badge {
-    display:inline-block; background: rgba(94,207,168,.15);
-    border: 1px solid var(--mint); color:var(--mint);
-    border-radius:50px; padding:6px 18px; font-size:.82rem; font-weight:700;
-    margin-bottom:20px; letter-spacing:.06em; text-transform:uppercase;
-  }
-  .hero h1 {
-    font-family: 'Baloo 2', cursive;
-    font-size: clamp(2.6rem, 6vw, 4.5rem);
-    font-weight:800; line-height:1.1; margin-bottom:20px;
-  }
-  .hero h1 span { background: linear-gradient(135deg,var(--mint),var(--lavender)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .hero p { color:var(--muted); font-size:1.15rem; line-height:1.7; margin-bottom:36px; }
-  .hero-btns { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
-  .btn-primary {
-    background: linear-gradient(135deg,var(--mint),var(--lavender));
-    border:none; border-radius:50px; padding:14px 32px;
-    color:#1E1E2E; font-weight:800; font-size:1rem; cursor:pointer;
-    transition: transform .15s, box-shadow .15s;
-    text-decoration:none; display:inline-block;
-  }
-  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 10px 32px rgba(94,207,168,.4); }
-  .btn-secondary {
-    background:transparent; border:2px solid var(--border);
-    border-radius:50px; padding:14px 32px;
-    color:var(--text); font-weight:700; font-size:1rem; cursor:pointer;
-    transition: border-color .2s, color .2s;
-    text-decoration:none; display:inline-block;
-  }
-  .btn-secondary:hover { border-color:var(--mint); color:var(--mint); }
+/* ═══ BUTTONS ═══ */
+.btn-primary {
+  background:linear-gradient(135deg,var(--mint),var(--lavender));
+  border:none; border-radius:50px; padding:14px 32px;
+  color:#1E1E2E; font-weight:800; font-size:1rem; cursor:pointer;
+  transition:transform .15s var(--spring), box-shadow .15s;
+  text-decoration:none; display:inline-block; position:relative; overflow:hidden;
+}
+.btn-primary:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(94,207,168,.4); }
+.btn-primary:active { transform:scale(.97); }
+.btn-secondary {
+  background:transparent; border:2px solid var(--border); border-radius:50px; padding:14px 32px;
+  color:var(--text); font-weight:700; font-size:1rem; cursor:pointer;
+  transition:border-color .2s, color .2s, background .2s;
+  text-decoration:none; display:inline-block;
+}
+.btn-secondary:hover { border-color:var(--mint); color:var(--mint); background:rgba(94,207,168,.06); }
 
-  /* FLOATERS */
-  .floaters { position:absolute; inset:0; pointer-events:none; z-index:0; }
-  .floater {
-    position:absolute; font-size:2.5rem; opacity:.15;
-    animation: floatUp 6s ease-in-out infinite;
-  }
-  @keyframes floatUp { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-20px) rotate(10deg)} }
+/* ═══ SECTIONS ═══ */
+section { padding:80px 32px; }
+.section-title { font-family:'Baloo 2',cursive; font-size:clamp(1.8rem,3vw,2.6rem); font-weight:800; text-align:center; margin-bottom:8px; }
+.section-title span { background:linear-gradient(135deg,var(--mint),var(--lavender)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+.section-sub { text-align:center; color:var(--muted); font-size:1rem; margin-bottom:48px; }
+.container { max-width:1200px; margin:0 auto; }
 
-  /* SECTION */
-  section { padding: 80px 32px; }
-  .section-title {
-    font-family:'Baloo 2', cursive; font-size:clamp(1.8rem,3vw,2.6rem); font-weight:800;
-    text-align:center; margin-bottom:8px;
-  }
-  .section-title span { background:linear-gradient(135deg,var(--mint),var(--lavender)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .section-sub { text-align:center; color:var(--muted); font-size:1rem; margin-bottom:48px; }
-  .container { max-width:1200px; margin:0 auto; }
+/* ═══ FEATURES ═══ */
+.features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px; }
+.feature-card {
+  background:var(--card-bg); border:1px solid var(--border); border-radius:20px; padding:32px 24px; text-align:center;
+  transition:transform .25s var(--spring), box-shadow .25s, border-color .2s;
+}
+.feature-card:hover { transform:translateY(-8px); box-shadow:0 20px 48px rgba(94,207,168,.12); border-color:rgba(94,207,168,.2); }
+.feature-icon { font-size:3rem; margin-bottom:16px; display:block; }
+.feature-card h3 { font-size:1.1rem; font-weight:800; margin-bottom:8px; }
+.feature-card p { color:var(--muted); font-size:.9rem; line-height:1.6; }
 
-  /* FEATURES */
-  .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px; }
-  .feature-card {
-    background:var(--card-bg); border:1px solid var(--border);
-    border-radius:20px; padding:32px 24px; text-align:center;
-    transition: transform .2s, box-shadow .2s;
-  }
-  .feature-card:hover { transform:translateY(-6px); box-shadow:0 16px 48px rgba(94,207,168,.12); }
-  .feature-icon { font-size:3rem; margin-bottom:16px; display:block; }
-  .feature-card h3 { font-size:1.1rem; font-weight:800; margin-bottom:8px; }
-  .feature-card p { color:var(--muted); font-size:.9rem; line-height:1.6; }
+/* ═══ PRODUCTS ═══ */
+.products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:28px; }
+.product-card {
+  background:var(--card-bg); border:1px solid var(--border); border-radius:24px; overflow:hidden;
+  transition:transform .25s var(--spring), box-shadow .25s, border-color .2s;
+  cursor:pointer;
+}
+.product-card:hover { transform:translateY(-10px); box-shadow:0 24px 56px rgba(0,0,0,.35); border-color:rgba(94,207,168,.18); }
+.product-img {
+  height:200px; display:flex; align-items:center; justify-content:center;
+  font-size:5rem; position:relative; overflow:hidden; transition:transform .3s;
+}
+.product-card:hover .product-img { transform:scale(1.04); }
+.product-badge {
+  position:absolute; top:12px; right:12px;
+  background:var(--coral); color:#fff; border-radius:50px;
+  padding:4px 12px; font-size:.72rem; font-weight:800; text-transform:uppercase;
+}
+.product-info { padding:20px; }
+.product-name { font-weight:800; font-size:1.05rem; margin-bottom:6px; }
+.product-desc { color:var(--muted); font-size:.87rem; line-height:1.5; margin-bottom:16px; }
+.product-footer { display:flex; align-items:center; justify-content:space-between; }
+.product-price { font-family:'Baloo 2',cursive; font-size:1.4rem; font-weight:800; color:var(--mint); }
+.add-cart {
+  background:linear-gradient(135deg,var(--mint),var(--lavender));
+  border:none; border-radius:50px; padding:9px 18px;
+  color:#1E1E2E; font-weight:800; font-size:.85rem; cursor:pointer;
+  display:flex; align-items:center; gap:6px;
+  transition:transform .15s var(--spring), box-shadow .15s;
+  position:relative; overflow:hidden;
+}
+.add-cart:hover { transform:scale(1.08); box-shadow:0 6px 20px rgba(94,207,168,.35); }
+.add-cart:active { transform:scale(.93); }
+@keyframes addPulse { 0%{transform:scale(1)} 50%{transform:scale(.88)} 100%{transform:scale(1)} }
+.add-cart.adding { animation:addPulse .25s ease; }
+.stars { color:var(--peach); font-size:.85rem; margin-bottom:4px; }
 
-  /* PRODUCTS */
-  .products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:28px; }
-  .product-card {
-    background:var(--card-bg); border:1px solid var(--border);
-    border-radius:24px; overflow:hidden;
-    transition: transform .2s, box-shadow .2s;
-    cursor:pointer;
-  }
-  .product-card:hover { transform:translateY(-8px); box-shadow:0 20px 56px rgba(0,0,0,.3); }
-  .product-img {
-    height:200px; display:flex; align-items:center; justify-content:center;
-    font-size:5rem; position:relative; overflow:hidden;
-  }
-  .product-badge {
-    position:absolute; top:12px; right:12px;
-    background:var(--coral); color:#fff; border-radius:50px;
-    padding:4px 12px; font-size:.72rem; font-weight:800; text-transform:uppercase;
-  }
-  .product-info { padding:20px; }
-  .product-name { font-weight:800; font-size:1.05rem; margin-bottom:6px; }
-  .product-desc { color:var(--muted); font-size:.87rem; line-height:1.5; margin-bottom:16px; }
-  .product-footer { display:flex; align-items:center; justify-content:space-between; }
-  .product-price { font-family:'Baloo 2',cursive; font-size:1.4rem; font-weight:800; color:var(--mint); }
-  .add-cart {
-    background:linear-gradient(135deg,var(--mint),var(--lavender));
-    border:none; border-radius:50px; padding:8px 18px;
-    color:#1E1E2E; font-weight:800; font-size:.85rem; cursor:pointer;
-    transition:transform .15s; display:flex; align-items:center; gap:6px;
-  }
-  .add-cart:hover { transform:scale(1.07); }
-  .stars { color:var(--peach); font-size:.85rem; margin-bottom:4px; }
+/* ═══ CATALOG TABS ═══ */
+.catalog-tabs { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:40px; }
+.tab-btn {
+  background:var(--card-bg); border:1px solid var(--border); border-radius:50px; padding:9px 22px;
+  color:var(--muted); font-weight:700; font-size:.9rem; cursor:pointer; transition:all .2s var(--spring);
+}
+.tab-btn:hover { border-color:rgba(94,207,168,.3); color:var(--mint); transform:translateY(-1px); }
+.tab-btn.active { background:linear-gradient(135deg,var(--mint),var(--lavender)); color:#1E1E2E; border-color:transparent; box-shadow:0 4px 16px rgba(94,207,168,.3); }
 
-  /* CATALOG TABS */
-  .catalog-tabs { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:40px; }
-  .tab-btn {
-    background:var(--card-bg); border:1px solid var(--border);
-    border-radius:50px; padding:9px 22px;
-    color:var(--muted); font-weight:700; font-size:.9rem; cursor:pointer;
-    transition: all .2s;
-  }
-  .tab-btn.active, .tab-btn:hover {
-    background:linear-gradient(135deg,var(--mint),var(--lavender));
-    color:#1E1E2E; border-color:transparent;
-  }
+/* ═══ GALLERY ═══ */
+#galeria { background:rgba(255,255,255,.02); }
+.gallery-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(2,180px); gap:16px; }
+.gallery-item {
+  border-radius:16px; display:flex; align-items:center; justify-content:center;
+  font-size:4rem; cursor:pointer; position:relative; overflow:hidden;
+  transition:transform .25s var(--spring);
+}
+.gallery-item:hover { transform:scale(1.04); }
+.gallery-item:nth-child(1) { grid-column:span 2;grid-row:span 2;font-size:7rem;background:linear-gradient(135deg,rgba(94,207,168,.2),rgba(184,169,245,.15)); }
+.gallery-item:nth-child(2) { background:linear-gradient(135deg,rgba(255,176,133,.2),rgba(255,133,133,.1)); }
+.gallery-item:nth-child(3) { background:linear-gradient(135deg,rgba(133,207,255,.2),rgba(94,207,168,.1)); }
+.gallery-item:nth-child(4) { background:linear-gradient(135deg,rgba(184,169,245,.2),rgba(255,176,133,.1)); }
+.gallery-item:nth-child(5) { background:linear-gradient(135deg,rgba(255,133,133,.15),rgba(255,176,133,.2)); }
+.gallery-overlay {
+  position:absolute; inset:0; background:rgba(30,30,46,.75);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity .2s; color:#fff; font-size:1rem; font-weight:700; font-family:'Baloo 2',cursive;
+}
+.gallery-item:hover .gallery-overlay { opacity:1; }
 
-  /* GALLERY */
-  #galeria { background: rgba(255,255,255,.02); }
-  .gallery-grid {
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    grid-template-rows:repeat(2,180px);
-    gap:16px;
-  }
-  .gallery-item {
-    border-radius:16px; display:flex; align-items:center; justify-content:center;
-    font-size:4rem; cursor:pointer; transition: transform .2s, filter .2s;
-    position:relative; overflow:hidden;
-  }
-  .gallery-item:hover { transform:scale(1.03); }
-  .gallery-item:nth-child(1) { grid-column:span 2; grid-row:span 2; font-size:7rem; background:linear-gradient(135deg,rgba(94,207,168,.2),rgba(184,169,245,.15)); }
-  .gallery-item:nth-child(2) { background:linear-gradient(135deg,rgba(255,176,133,.2),rgba(255,133,133,.1)); }
-  .gallery-item:nth-child(3) { background:linear-gradient(135deg,rgba(133,207,255,.2),rgba(94,207,168,.1)); }
-  .gallery-item:nth-child(4) { background:linear-gradient(135deg,rgba(184,169,245,.2),rgba(255,176,133,.1)); }
-  .gallery-item:nth-child(5) { background:linear-gradient(135deg,rgba(255,133,133,.15),rgba(255,176,133,.2)); }
-  .gallery-overlay {
-    position:absolute; inset:0; background:rgba(30,30,46,.7);
-    display:flex; align-items:center; justify-content:center;
-    opacity:0; transition:opacity .2s;
-    color:#fff; font-size:1rem; font-weight:700;
-  }
-  .gallery-item:hover .gallery-overlay { opacity:1; }
+/* ═══ FLOATING LABELS ═══ */
+.float-group { position:relative; margin-bottom:20px; }
+.float-input, .float-textarea {
+  width:100%; background:rgba(255,255,255,.07); border:1.5px solid var(--border);
+  border-radius:12px; padding:22px 42px 8px 16px; color:var(--text);
+  font-size:.95rem; outline:none; transition:border-color .2s, box-shadow .2s, background .2s;
+  line-height:1.4;
+}
+.float-select {
+  width:100%; background:rgba(255,255,255,.07); border:1.5px solid var(--border);
+  border-radius:12px; padding:22px 40px 8px 16px; color:var(--text);
+  font-size:.95rem; outline:none; appearance:none; cursor:pointer;
+  transition:border-color .2s, box-shadow .2s; line-height:1.4;
+}
+.float-select option { background:var(--dark2); color:var(--text); }
+.float-textarea { resize:vertical; min-height:100px; }
+.float-input:focus, .float-select:focus, .float-textarea:focus {
+  border-color:var(--mint); box-shadow:0 0 0 3px rgba(94,207,168,.14); background:rgba(255,255,255,.09);
+}
+.float-input.valid  { border-color:var(--green); box-shadow:0 0 0 3px rgba(37,211,102,.1); }
+.float-input.invalid, .float-select.invalid { border-color:var(--coral); box-shadow:0 0 0 3px rgba(255,133,133,.12); }
+.float-label {
+  position:absolute; left:16px; top:50%; transform:translateY(-50%);
+  color:var(--muted); font-size:.95rem; font-weight:600; pointer-events:none;
+  transition:all .2s var(--spring); white-space:nowrap;
+}
+.float-textarea ~ .float-label { top:20px; transform:none; }
+.float-input:focus ~ .float-label,
+.float-input:not(:placeholder-shown) ~ .float-label,
+.float-select:focus ~ .float-label,
+.float-select.has-value ~ .float-label,
+.float-textarea:focus ~ .float-label,
+.float-textarea:not(:placeholder-shown) ~ .float-label {
+  top:8px; transform:translateY(0) scale(.76); transform-origin:left; color:var(--mint); font-weight:700;
+}
+.float-input.invalid ~ .float-label { color:var(--coral); }
+.field-status {
+  position:absolute; right:14px; top:50%; transform:translateY(-50%);
+  font-size:1rem; opacity:0; transition:opacity .2s; pointer-events:none;
+}
+.float-textarea ~ .field-status { top:18px; transform:none; }
+.float-input.valid ~ .field-status  { opacity:1; }
+.float-input.valid ~ .field-status::after { content:'✓'; color:var(--green); }
+.float-input.invalid ~ .field-status { opacity:1; }
+.float-input.invalid ~ .field-status::after { content:'✕'; color:var(--coral); }
+.float-select-arrow { position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:.75rem; pointer-events:none; }
+.error-hint { font-size:.77rem; color:var(--coral); margin-top:4px; padding-left:4px; display:none; }
+.error-hint.show { display:block; }
 
-  /* CONTACT */
-  .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start; }
-  .contact-form {
-    background:var(--card-bg); border:1px solid var(--border);
-    border-radius:24px; padding:36px;
-  }
-  .form-group { margin-bottom:20px; }
-  .form-group label { display:block; font-weight:700; font-size:.9rem; margin-bottom:8px; color:var(--muted); }
-  .form-group input, .form-group select, .form-group textarea {
-    width:100%; background:rgba(255,255,255,.06); border:1px solid var(--border);
-    border-radius:12px; padding:12px 16px;
-    color:var(--text); font-family:'Nunito',sans-serif; font-size:.95rem;
-    outline:none; transition:border-color .2s;
-  }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--mint); }
-  .form-group textarea { resize:vertical; min-height:100px; }
-  .form-group select option { background:var(--dark2); }
-  .btn-whatsapp {
-    width:100%; background:linear-gradient(135deg,#25D366,#128C7E);
-    border:none; border-radius:14px; padding:16px;
-    color:#fff; font-weight:800; font-size:1.05rem; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; gap:10px;
-    transition:transform .15s, box-shadow .15s;
-  }
-  .btn-whatsapp:hover { transform:translateY(-2px); box-shadow:0 10px 32px rgba(37,211,102,.35); }
-  .contact-info h3 { font-family:'Baloo 2',cursive; font-size:1.7rem; font-weight:800; margin-bottom:16px; }
-  .contact-info p { color:var(--muted); line-height:1.7; margin-bottom:28px; }
-  .contact-item {
-    display:flex; align-items:center; gap:14px;
-    background:var(--card-bg); border:1px solid var(--border);
-    border-radius:14px; padding:16px 20px; margin-bottom:14px;
-  }
-  .contact-item-icon { font-size:1.5rem; }
-  .contact-item-text { font-weight:700; font-size:.95rem; }
-  .contact-item-sub { color:var(--muted); font-size:.82rem; }
+/* ═══ CONTACT ═══ */
+.contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start; }
+.contact-form { background:var(--card-bg); border:1px solid var(--border); border-radius:24px; padding:36px; }
+.contact-form-title { font-family:'Baloo 2',cursive; font-size:1.25rem; font-weight:800; margin-bottom:24px; }
+.btn-whatsapp {
+  width:100%; background:linear-gradient(135deg,#25D366,#128C7E);
+  border:none; border-radius:14px; padding:16px;
+  color:#fff; font-weight:800; font-size:1.05rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  transition:transform .15s var(--spring), box-shadow .15s; position:relative; overflow:hidden;
+}
+.btn-whatsapp:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(37,211,102,.4); }
+.btn-whatsapp:active { transform:scale(.98); }
+.contact-info h3 { font-family:'Baloo 2',cursive; font-size:1.7rem; font-weight:800; margin-bottom:16px; }
+.contact-info p { color:var(--muted); line-height:1.7; margin-bottom:28px; }
+.contact-item {
+  display:flex; align-items:center; gap:14px;
+  background:var(--card-bg); border:1px solid var(--border); border-radius:14px;
+  padding:16px 20px; margin-bottom:14px;
+  transition:border-color .2s, transform .2s;
+}
+.contact-item:hover { border-color:rgba(94,207,168,.2); transform:translateX(4px); }
+.contact-item-icon { font-size:1.5rem; }
+.contact-item-text { font-weight:700; font-size:.95rem; }
+.contact-item-sub { color:var(--muted); font-size:.82rem; }
 
-  /* CART MODAL */
-  .cart-overlay {
-    position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:200;
-    display:none; align-items:center; justify-content:center;
-    backdrop-filter:blur(6px);
-  }
-  .cart-overlay.open { display:flex; }
-  .cart-modal {
-    background:var(--dark2); border:1px solid var(--border);
-    border-radius:24px; width:min(540px,95vw); max-height:85vh;
-    overflow-y:auto; padding:32px;
-  }
-  .cart-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; }
-  .cart-header h2 { font-family:'Baloo 2',cursive; font-size:1.5rem; font-weight:800; }
-  .cart-close { background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer; transition:color .2s; }
-  .cart-close:hover { color:var(--coral); }
-  .cart-item {
-    display:flex; align-items:center; gap:16px;
-    border-bottom:1px solid var(--border); padding:16px 0;
-  }
-  .cart-item-emoji { font-size:2.5rem; width:50px; text-align:center; }
-  .cart-item-info { flex:1; }
-  .cart-item-name { font-weight:800; font-size:.98rem; }
-  .cart-item-price { color:var(--mint); font-weight:700; font-size:.9rem; }
-  .qty-controls { display:flex; align-items:center; gap:10px; }
-  .qty-btn { background:var(--card-bg); border:1px solid var(--border); border-radius:8px; width:30px;height:30px; color:var(--text);font-weight:800;cursor:pointer;font-size:1rem; transition:background .15s; }
-  .qty-btn:hover { background:rgba(94,207,168,.2); }
-  .qty-num { font-weight:800; min-width:20px; text-align:center; }
-  .remove-btn { background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.2rem;transition:color .2s; }
-  .remove-btn:hover { color:var(--coral); }
-  .cart-footer { margin-top:24px; }
-  .cart-total { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; font-size:1.1rem; font-weight:800; }
-  .cart-total-price { color:var(--mint); font-family:'Baloo 2',cursive; font-size:1.6rem; }
-  .btn-checkout {
-    width:100%; background:linear-gradient(135deg,#25D366,#128C7E);
-    border:none; border-radius:14px; padding:16px;
-    color:#fff; font-weight:800; font-size:1.05rem; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; gap:10px;
-    transition:transform .15s, box-shadow .15s;
-  }
-  .btn-checkout:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(37,211,102,.35); }
-  .cart-empty { text-align:center; color:var(--muted); padding:40px 0; font-size:1rem; }
-  .cart-empty-icon { font-size:4rem; margin-bottom:12px; }
+/* ═══ CART DRAWER ═══ */
+.drawer-backdrop {
+  position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0);
+  pointer-events:none; transition:background .3s;
+}
+.drawer-backdrop.open { background:rgba(0,0,0,.65); backdrop-filter:blur(4px); pointer-events:all; }
+.cart-drawer {
+  position:fixed; top:0; right:0; bottom:0; z-index:201;
+  width:min(420px,100vw); background:var(--dark2);
+  border-left:1px solid var(--border);
+  transform:translateX(100%); transition:transform .35s cubic-bezier(.4,0,.2,1);
+  display:flex; flex-direction:column; box-shadow:-24px 0 64px rgba(0,0,0,.5);
+}
+.cart-drawer.open { transform:translateX(0); }
+.drawer-header {
+  padding:24px 24px 16px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
+}
+.drawer-header h2 { font-family:'Baloo 2',cursive; font-size:1.4rem; font-weight:800; }
+.drawer-close {
+  background:var(--card-bg); border:1px solid var(--border); border-radius:10px;
+  width:34px; height:34px; color:var(--muted); font-size:1rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:all .2s;
+}
+.drawer-close:hover { color:var(--coral); border-color:var(--coral); background:rgba(255,133,133,.08); }
+.drawer-items { flex:1; overflow-y:auto; padding:16px 24px; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+.drawer-item {
+  display:flex; align-items:center; gap:12px;
+  padding:14px 0; border-bottom:1px solid var(--border);
+  animation:itemSlideIn .3s var(--spring);
+}
+@keyframes itemSlideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+.drawer-item-emoji { font-size:2.2rem; width:46px; text-align:center; flex-shrink:0; }
+.drawer-item-info { flex:1; min-width:0; }
+.drawer-item-name { font-weight:800; font-size:.92rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.drawer-item-price { color:var(--mint); font-weight:700; font-size:.85rem; margin-top:2px; }
+.qty-ctrl { display:flex; align-items:center; gap:8px; }
+.qty-btn {
+  background:var(--card-bg); border:1px solid var(--border); border-radius:8px;
+  width:28px; height:28px; color:var(--text); font-weight:800; cursor:pointer; font-size:1rem;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .15s var(--spring);
+}
+.qty-btn:hover { background:rgba(94,207,168,.15); border-color:var(--mint); color:var(--mint); }
+.qty-btn:active { transform:scale(.88); }
+.qty-num { font-weight:800; min-width:20px; text-align:center; font-size:.95rem; }
+.item-remove { background:none; border:none; color:var(--muted); cursor:pointer; font-size:1.1rem; padding:4px; transition:color .2s, transform .2s; }
+.item-remove:hover { color:var(--coral); transform:scale(1.25); }
+.drawer-empty { text-align:center; color:var(--muted); padding:60px 20px; }
+.drawer-empty-icon { font-size:4rem; opacity:.5; margin-bottom:12px; }
+.drawer-footer { padding:20px 24px; border-top:1px solid var(--border); flex-shrink:0; background:var(--dark2); }
+.drawer-subtotal { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+.drawer-sub-label { color:var(--muted); font-weight:600; font-size:.95rem; }
+.drawer-sub-value { font-family:'Baloo 2',cursive; font-size:1.6rem; font-weight:800; color:var(--mint); }
+.btn-checkout {
+  width:100%; background:linear-gradient(135deg,#25D366,#128C7E);
+  border:none; border-radius:14px; padding:16px; color:#fff; font-weight:800; font-size:1rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  transition:transform .15s var(--spring), box-shadow .15s; position:relative; overflow:hidden;
+}
+.btn-checkout:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(37,211,102,.4); }
+.btn-checkout:active { transform:scale(.98); }
+.btn-checkout:disabled { opacity:.45; cursor:not-allowed; transform:none !important; }
 
-  /* TOAST */
-  .toast {
-    position:fixed; bottom:30px; right:30px; z-index:300;
-    background:linear-gradient(135deg,var(--mint),var(--lavender));
-    color:#1E1E2E; font-weight:800; font-size:.95rem;
-    border-radius:14px; padding:14px 24px;
-    transform:translateY(80px); opacity:0;
-    transition:all .3s; pointer-events:none;
-    display:flex; align-items:center; gap:10px;
-  }
-  .toast.show { transform:translateY(0); opacity:1; }
+/* ═══ CHECKOUT WIZARD ═══ */
+.wizard-overlay {
+  position:fixed; inset:0; z-index:250; background:rgba(0,0,0,.82);
+  backdrop-filter:blur(10px); display:flex; align-items:center; justify-content:center;
+  padding:20px; opacity:0; pointer-events:none; transition:opacity .3s;
+}
+.wizard-overlay.open { opacity:1; pointer-events:all; }
+.wizard-modal {
+  background:var(--dark2); border:1px solid var(--border); border-radius:28px;
+  width:min(560px,100%); max-height:90vh; overflow-y:auto; overflow-x:hidden;
+  transform:scale(.94) translateY(24px); transition:transform .4s var(--spring);
+  scrollbar-width:thin;
+}
+.wizard-overlay.open .wizard-modal { transform:scale(1) translateY(0); }
+.wizard-top {
+  padding:24px 28px 20px; position:sticky; top:0; background:var(--dark2);
+  z-index:2; border-bottom:1px solid var(--border);
+}
+.wizard-top-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.wizard-title { font-family:'Baloo 2',cursive; font-size:1.3rem; font-weight:800; }
+.wizard-close {
+  background:var(--card-bg); border:1px solid var(--border); border-radius:10px;
+  width:34px; height:34px; color:var(--muted); font-size:1rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:all .2s;
+}
+.wizard-close:hover { color:var(--coral); border-color:var(--coral); }
 
-  /* FOOTER */
-  footer {
-    background:rgba(0,0,0,.3); border-top:1px solid var(--border);
-    padding:40px 32px; text-align:center;
-  }
-  footer .logo { display:block; margin-bottom:12px; font-size:1.8rem; }
-  footer p { color:var(--muted); font-size:.87rem; line-height:1.7; }
+/* Step bar */
+.step-bar { display:flex; align-items:flex-start; }
+.step-dot { display:flex; flex-direction:column; align-items:center; flex:1; position:relative; }
+.step-dot-num {
+  width:34px; height:34px; border-radius:50%;
+  background:var(--dark3); border:2px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:.82rem; z-index:1; position:relative;
+  transition:all .3s var(--spring);
+}
+.step-dot.active .step-dot-num { background:var(--mint); border-color:var(--mint); color:#1E1E2E; transform:scale(1.12); box-shadow:0 4px 16px rgba(94,207,168,.4); }
+.step-dot.done .step-dot-num { background:var(--green); border-color:var(--green); color:#fff; }
+.step-dot-label { font-size:.68rem; color:var(--muted); margin-top:5px; font-weight:700; text-align:center; white-space:nowrap; }
+.step-dot.active .step-dot-label { color:var(--mint); }
+.step-dot.done .step-dot-label { color:var(--green); }
+.step-connector {
+  flex:1; height:2px; background:var(--border); margin-top:17px;
+  transition:background .4s; flex-shrink:1;
+}
+.step-connector.done { background:var(--green); }
 
-  @media(max-width:768px) {
-    nav .nav-links { display:none; }
-    .contact-grid { grid-template-columns:1fr; }
-    .gallery-grid { grid-template-columns:repeat(2,1fr); grid-template-rows:auto; }
-    .gallery-item:nth-child(1) { grid-column:span 2; grid-row:span 1; font-size:4rem; }
-    section { padding:60px 20px; }
-  }
+.wizard-body { padding:28px; }
+.step-content { display:none; }
+.step-content.active { display:block; animation:stepIn .3s var(--ease-out); }
+@keyframes stepIn { from{opacity:0;transform:translateX(18px)} to{opacity:1;transform:translateX(0)} }
+.step-heading { font-family:'Baloo 2',cursive; font-size:1.15rem; font-weight:800; margin-bottom:4px; }
+.step-sub { color:var(--muted); font-size:.87rem; margin-bottom:22px; }
+
+.wizard-actions { display:flex; gap:12px; margin-top:8px; }
+.btn-wiz-back {
+  background:var(--card-bg); border:1.5px solid var(--border); border-radius:14px; padding:14px 20px;
+  color:var(--muted); font-weight:700; font-size:.95rem; cursor:pointer; transition:all .2s; white-space:nowrap;
+}
+.btn-wiz-back:hover { border-color:var(--muted); color:var(--text); }
+.btn-wiz-next {
+  flex:1; background:linear-gradient(135deg,var(--mint),var(--lavender));
+  border:none; border-radius:14px; padding:14px; color:#1E1E2E;
+  font-weight:800; font-size:.95rem; cursor:pointer;
+  transition:transform .15s var(--spring), box-shadow .15s;
+}
+.btn-wiz-next:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(94,207,168,.35); }
+.btn-wiz-next:active { transform:scale(.97); }
+.btn-wiz-next.send { background:linear-gradient(135deg,#25D366,#128C7E); color:#fff; }
+
+/* ═══ PAYMENT OPTIONS ═══ */
+.payment-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.payment-opt {
+  background:var(--card-bg); border:2px solid var(--border); border-radius:16px;
+  padding:18px 14px; cursor:pointer; text-align:center;
+  transition:all .2s var(--spring); position:relative; user-select:none;
+}
+.payment-opt:hover { border-color:rgba(94,207,168,.4); transform:translateY(-3px); }
+.payment-opt.selected { border-color:var(--mint); background:rgba(94,207,168,.08); transform:translateY(-3px); box-shadow:0 8px 24px rgba(94,207,168,.2); }
+.pay-icon { font-size:2rem; margin-bottom:6px; display:block; }
+.pay-name { font-weight:800; font-size:.92rem; }
+.payment-opt.selected .pay-name { color:var(--mint); }
+.pay-desc { color:var(--muted); font-size:.75rem; margin-top:3px; }
+.pay-badge { display:inline-block; background:rgba(37,211,102,.15); border:1px solid var(--green); color:var(--green); border-radius:50px; padding:2px 8px; font-size:.7rem; font-weight:800; margin-top:5px; }
+
+/* ═══ ORDER SUMMARY ═══ */
+.summary-badge {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  background:rgba(94,207,168,.07); border:1px solid rgba(94,207,168,.2);
+  border-radius:12px; padding:12px 16px; margin-bottom:20px;
+  font-size:.82rem; color:var(--muted);
+}
+.summary-order-id { font-weight:800; color:var(--mint); font-family:'Baloo 2',cursive; font-size:1rem; }
+.summary-line {
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding:10px 0; border-bottom:1px solid var(--border); gap:12px;
+}
+.summary-line-name { color:var(--muted); font-size:.88rem; flex:1; }
+.summary-line-val { font-weight:700; font-size:.88rem; white-space:nowrap; }
+.summary-discount { color:var(--green); }
+.summary-total-row { display:flex; justify-content:space-between; align-items:center; padding:16px 0 0; border-top:2px solid var(--border); margin-top:4px; }
+.summary-total-lbl { font-weight:800; font-size:1rem; }
+.summary-total-val { font-family:'Baloo 2',cursive; font-size:1.9rem; font-weight:800; color:var(--mint); }
+.summary-info-box { background:var(--card-bg); border:1px solid var(--border); border-radius:14px; padding:16px; margin-top:18px; }
+.summary-info-title { font-weight:800; font-size:.9rem; margin-bottom:8px; }
+.summary-info-body { color:var(--muted); font-size:.84rem; line-height:1.9; }
+.pix-tag { display:inline-block; background:rgba(37,211,102,.15); border:1px solid var(--green); color:var(--green); border-radius:50px; padding:2px 8px; font-size:.72rem; font-weight:800; margin-left:6px; }
+
+/* ═══ CEP ROW ═══ */
+.cep-row { display:flex; gap:12px; align-items:flex-start; }
+.cep-row .float-group { flex:1; }
+.cep-btn {
+  background:var(--card-bg); border:1.5px solid var(--border); border-radius:12px;
+  padding:0 16px; height:56px; color:var(--mint); font-weight:700; font-size:.85rem;
+  cursor:pointer; transition:all .2s; white-space:nowrap; flex-shrink:0;
+  display:flex; align-items:center; gap:6px; margin-top:0;
+}
+.cep-btn:hover { border-color:var(--mint); background:rgba(94,207,168,.08); }
+.cep-spinner { display:none; width:16px; height:16px; border:2px solid rgba(94,207,168,.3); border-top-color:var(--mint); border-radius:50%; animation:spin .6s linear infinite; }
+.cep-btn.loading .cep-spinner { display:block; }
+.cep-btn.loading .cep-btn-text { display:none; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.addr-row { display:grid; grid-template-columns:1fr 120px; gap:12px; }
+
+/* ═══ TOAST ═══ */
+.toast-stack { position:fixed; bottom:24px; right:24px; z-index:400; display:flex; flex-direction:column; gap:10px; align-items:flex-end; pointer-events:none; }
+.toast {
+  background:linear-gradient(135deg,var(--mint),var(--lavender)); color:#1E1E2E;
+  font-weight:800; font-size:.9rem; border-radius:14px; padding:12px 20px;
+  display:flex; align-items:center; gap:10px; max-width:320px;
+  transform:translateX(140%); opacity:0;
+  transition:transform .4s var(--spring), opacity .3s;
+  pointer-events:none; box-shadow:0 8px 24px rgba(0,0,0,.3);
+}
+.toast.show { transform:translateX(0); opacity:1; }
+.toast.error   { background:linear-gradient(135deg,var(--coral),#ff5252); color:#fff; }
+.toast.success { background:linear-gradient(135deg,#25D366,#128C7E); color:#fff; }
+
+/* ═══ RIPPLE ═══ */
+.ripple-wave {
+  position:absolute; border-radius:50%; pointer-events:none;
+  background:rgba(255,255,255,.25); transform:scale(0);
+  animation:rippleAnim .6s linear forwards;
+}
+@keyframes rippleAnim { to{transform:scale(4);opacity:0} }
+
+/* ═══ FOOTER ═══ */
+footer { background:rgba(0,0,0,.3); border-top:1px solid var(--border); padding:40px 32px; text-align:center; }
+footer .logo { display:block; margin-bottom:12px; font-size:1.8rem; }
+footer p { color:var(--muted); font-size:.87rem; line-height:1.7; }
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:768px) {
+  nav .nav-links { display:none; }
+  .contact-grid { grid-template-columns:1fr; }
+  .gallery-grid { grid-template-columns:repeat(2,1fr); grid-template-rows:auto; }
+  .gallery-item:nth-child(1) { grid-column:span 2;grid-row:span 1;font-size:4rem; }
+  section { padding:60px 20px; }
+  .addr-row { grid-template-columns:1fr; }
+}
+@media(max-width:480px) {
+  nav { padding:12px 16px; }
+  .wizard-modal { border-radius:20px 20px 0 0; }
+  .wizard-overlay { align-items:flex-end; padding:0; }
+}
 </style>
 </head>
 <body>
@@ -343,7 +540,7 @@
     <li><a href="#galeria">Galeria</a></li>
     <li><a href="#contato">Contato</a></li>
   </ul>
-  <button class="cart-btn" onclick="openCart()">
+  <button class="cart-btn" onclick="openDrawer()">
     🛒 Carrinho
     <span class="cart-count" id="cartCount">0</span>
   </button>
@@ -352,11 +549,7 @@
 <!-- HERO -->
 <section class="hero" id="inicio">
   <div class="hero-bg"></div>
-  <div class="blobs">
-    <div class="blob blob1"></div>
-    <div class="blob blob2"></div>
-    <div class="blob blob3"></div>
-  </div>
+  <div class="blobs"><div class="blob blob1"></div><div class="blob blob2"></div><div class="blob blob3"></div></div>
   <div class="floaters">
     <div class="floater" style="top:15%;left:8%;animation-delay:0s">🌀</div>
     <div class="floater" style="top:20%;right:10%;animation-delay:-2s">🧸</div>
@@ -381,26 +574,10 @@
     <div class="section-title">Por que <span>SensoPrint?</span></div>
     <p class="section-sub">Cada peça é impressa com cuidado, usando materiais seguros e não tóxicos</p>
     <div class="features-grid">
-      <div class="feature-card">
-        <span class="feature-icon">🧠</span>
-        <h3>Antiestresse comprovado</h3>
-        <p>Texturas e movimentos que ativam o foco e reduzem a ansiedade em momentos de tensão.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🌱</span>
-        <h3>Material ecológico</h3>
-        <p>Impressos em PLA biodegradável, seguro para todas as idades e sustentável para o planeta.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🎨</span>
-        <h3>Personalização total</h3>
-        <p>Cores, tamanhos e formatos personalizados. Encomendar um brinquedo único nunca foi tão fácil.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🚚</span>
-        <h3>Entrega rápida</h3>
-        <p>Enviamos para todo o Brasil. Pedidos personalizados prontos em até 5 dias úteis.</p>
-      </div>
+      <div class="feature-card"><span class="feature-icon">🧠</span><h3>Antiestresse comprovado</h3><p>Texturas e movimentos que ativam o foco e reduzem a ansiedade em momentos de tensão.</p></div>
+      <div class="feature-card"><span class="feature-icon">🌱</span><h3>Material ecológico</h3><p>Impressos em PLA biodegradável, seguro para todas as idades e sustentável para o planeta.</p></div>
+      <div class="feature-card"><span class="feature-icon">🎨</span><h3>Personalização total</h3><p>Cores, tamanhos e formatos personalizados. Encomendar um brinquedo único nunca foi tão fácil.</p></div>
+      <div class="feature-card"><span class="feature-icon">🚚</span><h3>Entrega rápida</h3><p>Enviamos para todo o Brasil. Pedidos personalizados prontos em até 5 dias úteis.</p></div>
     </div>
   </div>
 </section>
@@ -409,12 +586,12 @@
 <section id="produtos" style="background:rgba(255,255,255,.02)">
   <div class="container">
     <div class="section-title">Produtos em <span>Destaque</span></div>
-    <p class="section-sub">Os queridinhos dos nossos clientes — clique no card para adicionar ao carrinho</p>
+    <p class="section-sub">Os queridinhos dos nossos clientes — clique em Adicionar para incluir no carrinho</p>
     <div class="products-grid" id="destaquesGrid"></div>
   </div>
 </section>
 
-<!-- CATALOGO -->
+<!-- CATÁLOGO -->
 <section id="catalogo">
   <div class="container">
     <div class="section-title">Catálogo <span>Completo</span></div>
@@ -443,75 +620,65 @@
 <section id="contato">
   <div class="container">
     <div class="section-title">Entre em <span>Contato</span></div>
-    <p class="section-sub">Fale conosco pelo WhatsApp com todas as informações do seu pedido</p>
+    <p class="section-sub">Encomendas personalizadas, dúvidas ou pedido direto pelo WhatsApp</p>
     <div class="contact-grid">
       <div class="contact-info">
         <h3>Atendimento personalizado 💬</h3>
         <p>Preencha o formulário ao lado e receba um relatório completo do seu pedido direto no WhatsApp. Respondemos em até 1 hora nos dias úteis!</p>
-        <div class="contact-item">
-          <div class="contact-item-icon">📱</div>
-          <div>
-            <div class="contact-item-text">WhatsApp</div>
-            <div class="contact-item-sub">(61) 9 9999-0000 — Brasília/DF</div>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item-icon">📦</div>
-          <div>
-            <div class="contact-item-text">Pedidos personalizados</div>
-            <div class="contact-item-sub">Prazo: 5 dias úteis após confirmação</div>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item-icon">🌍</div>
-          <div>
-            <div class="contact-item-text">Envio para todo o Brasil</div>
-            <div class="contact-item-sub">Correios PAC, SEDEX e transportadoras</div>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item-icon">⏰</div>
-          <div>
-            <div class="contact-item-text">Horário de atendimento</div>
-            <div class="contact-item-sub">Seg–Sex: 8h–18h | Sáb: 9h–13h</div>
-          </div>
-        </div>
+        <div class="contact-item"><div class="contact-item-icon">📱</div><div><div class="contact-item-text">WhatsApp</div><div class="contact-item-sub">(61) 9 4319-6166 — Brasília/DF</div></div></div>
+        <div class="contact-item"><div class="contact-item-icon">📦</div><div><div class="contact-item-text">Pedidos personalizados</div><div class="contact-item-sub">Prazo: 5 dias úteis após confirmação</div></div></div>
+        <div class="contact-item"><div class="contact-item-icon">🌍</div><div><div class="contact-item-text">Envio para todo o Brasil</div><div class="contact-item-sub">Correios PAC, SEDEX e transportadoras</div></div></div>
+        <div class="contact-item"><div class="contact-item-icon">⏰</div><div><div class="contact-item-text">Horário de atendimento</div><div class="contact-item-sub">Seg–Sex: 8h–18h | Sáb: 9h–13h</div></div></div>
       </div>
       <div class="contact-form">
-        <h3 style="font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:800;margin-bottom:24px;">📋 Formulário de Pedido</h3>
-        <div class="form-group">
-          <label>Nome completo</label>
-          <input type="text" id="fNome" placeholder="Seu nome">
+        <div class="contact-form-title">📋 Consulta / Encomenda</div>
+
+        <div class="float-group">
+          <input class="float-input" type="text" id="fc_nome" placeholder=" " autocomplete="name">
+          <label class="float-label" for="fc_nome">Nome completo *</label>
+          <span class="field-status"></span>
         </div>
-        <div class="form-group">
-          <label>WhatsApp</label>
-          <input type="tel" id="fTel" placeholder="(61) 9 0000-0000">
+        <span class="error-hint" id="ec_nome"></span>
+
+        <div class="float-group">
+          <input class="float-input" type="tel" id="fc_tel" placeholder=" " maxlength="16" autocomplete="tel">
+          <label class="float-label" for="fc_tel">WhatsApp *</label>
+          <span class="field-status"></span>
         </div>
-        <div class="form-group">
-          <label>Produto de interesse</label>
-          <select id="fProduto">
-            <option value="">Selecione um produto</option>
+        <span class="error-hint" id="ec_tel"></span>
+
+        <div class="float-group" style="margin-bottom:8px">
+          <select class="float-select" id="fc_produto">
+            <option value=""></option>
             <option>Pop Fidget Hexagonal</option>
             <option>Cubo Infinito Antiestresse</option>
             <option>Caracol Articulado</option>
             <option>Mandala Spinner</option>
             <option>Lagarta Sensorial</option>
             <option>Dragão Articulado</option>
-            <option>Kit Completo Zen</option>
+            <option>Kit Zen Completo</option>
             <option>Personalizado</option>
           </select>
+          <label class="float-label" for="fc_produto">Produto de interesse</label>
+          <span class="float-select-arrow">▼</span>
         </div>
-        <div class="form-group">
-          <label>Cor preferida</label>
-          <input type="text" id="fCor" placeholder="Ex: azul, verde, rosa...">
+
+        <div class="float-group">
+          <input class="float-input" type="text" id="fc_cor" placeholder=" ">
+          <label class="float-label" for="fc_cor">Cor preferida (opcional)</label>
+          <span class="field-status"></span>
         </div>
-        <div class="form-group">
-          <label>Mensagem / detalhes do pedido</label>
-          <textarea id="fMsg" placeholder="Conte mais sobre o que precisa..."></textarea>
+
+        <div class="float-group">
+          <textarea class="float-textarea" id="fc_msg" placeholder=" "></textarea>
+          <label class="float-label" for="fc_msg">Mensagem / detalhes do pedido *</label>
+          <span class="field-status"></span>
         </div>
-        <button class="btn-whatsapp" onclick="enviarWhatsApp()">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-          Enviar relatório pelo WhatsApp
+        <span class="error-hint" id="ec_msg"></span>
+
+        <button class="btn-whatsapp" onclick="enviarContatoWhatsApp(event)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Enviar pelo WhatsApp
         </button>
       </div>
     </div>
@@ -521,217 +688,921 @@
 <!-- FOOTER -->
 <footer>
   <div class="logo">🖨️ SensoPrint</div>
-  <p>Brinquedos sensoriais impressos em 3D — feitos com carinho para o seu bem-estar.<br>
-  Brasília, DF · (61) 9 9999-0000 · sensoprint@email.com</p>
+  <p>Brinquedos sensoriais impressos em 3D — feitos com carinho para o seu bem-estar.<br>Brasília, DF · (61) 9 4319-6166 · sensoprint@email.com</p>
   <p style="margin-top:12px;font-size:.78rem;">© 2025 SensoPrint. Todos os direitos reservados.</p>
 </footer>
 
-<!-- CART OVERLAY -->
-<div class="cart-overlay" id="cartOverlay" onclick="closeCartOutside(event)">
-  <div class="cart-modal" id="cartModal">
-    <div class="cart-header">
-      <h2>🛒 Meu Carrinho</h2>
-      <button class="cart-close" onclick="closeCart()">✕</button>
+<!-- ═══ CART DRAWER ═══ -->
+<div id="drawerBackdrop" class="drawer-backdrop" onclick="closeDrawer()"></div>
+<div id="cartDrawer" class="cart-drawer">
+  <div class="drawer-header">
+    <h2>🛒 Meu Carrinho</h2>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="Fechar carrinho">✕</button>
+  </div>
+  <div class="drawer-items" id="drawerItems"></div>
+  <div class="drawer-footer">
+    <div class="drawer-subtotal">
+      <span class="drawer-sub-label">Total estimado</span>
+      <span class="drawer-sub-value" id="drawerTotal">R$ 0,00</span>
     </div>
-    <div id="cartItems"></div>
-    <div class="cart-footer" id="cartFooter" style="display:none">
-      <div class="cart-total">
-        <span>Total</span>
-        <span class="cart-total-price" id="cartTotal">R$ 0,00</span>
-      </div>
-      <button class="btn-checkout" onclick="checkoutWhatsApp()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-        Fechar pedido pelo WhatsApp
-      </button>
-    </div>
+    <button class="btn-checkout" id="btnCheckout" onclick="openCheckout()" disabled>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      Finalizar pedido
+    </button>
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
+<!-- ═══ CHECKOUT WIZARD ═══ -->
+<div id="wizardOverlay" class="wizard-overlay">
+  <div class="wizard-modal" id="wizardModal">
+
+    <!-- Sticky header with step bar -->
+    <div class="wizard-top">
+      <div class="wizard-top-bar">
+        <span class="wizard-title" id="wizardTitle">👤 Seus Dados</span>
+        <button class="wizard-close" onclick="closeCheckout()" aria-label="Fechar">✕</button>
+      </div>
+      <div class="step-bar" id="stepBar">
+        <div class="step-dot active" id="sd1"><div class="step-dot-num">1</div><div class="step-dot-label">Dados</div></div>
+        <div class="step-connector" id="sc1"></div>
+        <div class="step-dot" id="sd2"><div class="step-dot-num">2</div><div class="step-dot-label">Endereço</div></div>
+        <div class="step-connector" id="sc2"></div>
+        <div class="step-dot" id="sd3"><div class="step-dot-num">3</div><div class="step-dot-label">Pagamento</div></div>
+        <div class="step-connector" id="sc3"></div>
+        <div class="step-dot" id="sd4"><div class="step-dot-num">4</div><div class="step-dot-label">Confirmação</div></div>
+      </div>
+    </div>
+
+    <div class="wizard-body">
+
+      <!-- ── STEP 1: Dados pessoais ── -->
+      <div class="step-content active" id="step1">
+        <div class="step-heading">Sobre você</div>
+        <div class="step-sub">Para enviarmos a confirmação do pedido</div>
+
+        <div class="float-group">
+          <input class="float-input" type="text" id="f_nome" placeholder=" " autocomplete="name">
+          <label class="float-label" for="f_nome">Nome completo *</label>
+          <span class="field-status"></span>
+        </div>
+        <div class="error-hint" id="e_nome"></div>
+
+        <div class="float-group">
+          <input class="float-input" type="tel" id="f_tel" placeholder=" " maxlength="16" autocomplete="tel">
+          <label class="float-label" for="f_tel">WhatsApp *</label>
+          <span class="field-status"></span>
+        </div>
+        <div class="error-hint" id="e_tel"></div>
+
+        <div class="float-group">
+          <input class="float-input" type="email" id="f_email" placeholder=" " autocomplete="email">
+          <label class="float-label" for="f_email">E-mail (opcional)</label>
+          <span class="field-status"></span>
+        </div>
+        <div class="error-hint" id="e_email"></div>
+
+        <div class="wizard-actions">
+          <button class="btn-wiz-back" id="btnBack1" onclick="prevStep()">← Voltar</button>
+          <button class="btn-wiz-next" onclick="nextStep()">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: Endereço ── -->
+      <div class="step-content" id="step2">
+        <div class="step-heading">Endereço de entrega</div>
+        <div class="step-sub">Digite o CEP e preenchemos automaticamente</div>
+
+        <div class="cep-row">
+          <div class="float-group">
+            <input class="float-input" type="text" id="f_cep" placeholder=" " maxlength="9" inputmode="numeric">
+            <label class="float-label" for="f_cep">CEP *</label>
+            <span class="field-status"></span>
+          </div>
+          <button class="cep-btn" id="cepBtn" onclick="lookupCEP()" type="button">
+            <div class="cep-spinner"></div>
+            <span class="cep-btn-text">🔍 Buscar</span>
+          </button>
+        </div>
+        <div class="error-hint" id="e_cep"></div>
+
+        <div class="addr-row">
+          <div>
+            <div class="float-group">
+              <input class="float-input" type="text" id="f_rua" placeholder=" " autocomplete="street-address">
+              <label class="float-label" for="f_rua">Rua / Avenida *</label>
+              <span class="field-status"></span>
+            </div>
+            <div class="error-hint" id="e_rua"></div>
+          </div>
+          <div>
+            <div class="float-group">
+              <input class="float-input" type="text" id="f_numero" placeholder=" ">
+              <label class="float-label" for="f_numero">Número *</label>
+              <span class="field-status"></span>
+            </div>
+            <div class="error-hint" id="e_numero"></div>
+          </div>
+        </div>
+
+        <div class="float-group">
+          <input class="float-input" type="text" id="f_complemento" placeholder=" ">
+          <label class="float-label" for="f_complemento">Complemento (apto, bloco…)</label>
+          <span class="field-status"></span>
+        </div>
+
+        <div class="float-group">
+          <input class="float-input" type="text" id="f_bairro" placeholder=" ">
+          <label class="float-label" for="f_bairro">Bairro *</label>
+          <span class="field-status"></span>
+        </div>
+        <div class="error-hint" id="e_bairro"></div>
+
+        <div class="addr-row">
+          <div>
+            <div class="float-group">
+              <input class="float-input" type="text" id="f_cidade" placeholder=" ">
+              <label class="float-label" for="f_cidade">Cidade *</label>
+              <span class="field-status"></span>
+            </div>
+            <div class="error-hint" id="e_cidade"></div>
+          </div>
+          <div>
+            <div class="float-group" style="margin-bottom:8px">
+              <select class="float-select" id="f_uf">
+                <option value=""></option>
+                <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+                <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+                <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+                <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+                <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+                <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+                <option>SP</option><option>SE</option><option>TO</option>
+              </select>
+              <label class="float-label" for="f_uf">UF *</label>
+              <span class="float-select-arrow">▼</span>
+            </div>
+            <div class="error-hint" id="e_uf"></div>
+          </div>
+        </div>
+
+        <div class="wizard-actions">
+          <button class="btn-wiz-back" onclick="prevStep()">← Voltar</button>
+          <button class="btn-wiz-next" onclick="nextStep()">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Pagamento ── -->
+      <div class="step-content" id="step3">
+        <div class="step-heading">Forma de pagamento</div>
+        <div class="step-sub">Escolha como prefere pagar</div>
+
+        <div class="payment-grid" id="paymentGrid">
+          <div class="payment-opt" onclick="selectPayment('pix', this)">
+            <span class="pay-icon">💰</span>
+            <div class="pay-name">PIX</div>
+            <div class="pay-desc">Chave ou QR Code</div>
+            <div class="pay-badge">5% off</div>
+          </div>
+          <div class="payment-opt" onclick="selectPayment('boleto', this)">
+            <span class="pay-icon">🏦</span>
+            <div class="pay-name">Boleto</div>
+            <div class="pay-desc">Vence em 3 dias úteis</div>
+          </div>
+          <div class="payment-opt" onclick="selectPayment('cartao', this)">
+            <span class="pay-icon">💳</span>
+            <div class="pay-name">Cartão de Crédito</div>
+            <div class="pay-desc">Até 3× sem juros</div>
+          </div>
+          <div class="payment-opt" onclick="selectPayment('retirada', this)">
+            <span class="pay-icon">🏠</span>
+            <div class="pay-name">Retirada</div>
+            <div class="pay-desc">Combinar local — Brasília/DF</div>
+          </div>
+        </div>
+        <div class="error-hint" id="e_pag" style="margin-top:8px"></div>
+
+        <div class="wizard-actions" style="margin-top:24px">
+          <button class="btn-wiz-back" onclick="prevStep()">← Voltar</button>
+          <button class="btn-wiz-next" onclick="nextStep()">Revisar pedido →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 4: Resumo / Confirmação ── -->
+      <div class="step-content" id="step4">
+        <div class="step-heading">Confirme seu pedido</div>
+        <div class="step-sub">Revise tudo antes de enviar pelo WhatsApp</div>
+
+        <div id="summaryContent"></div>
+
+        <div class="wizard-actions" style="margin-top:20px">
+          <button class="btn-wiz-back" onclick="prevStep()">← Editar</button>
+          <button class="btn-wiz-next send" id="btnSend" onclick="sendToWhatsApp()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            Enviar pelo WhatsApp
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /wizard-body -->
+  </div><!-- /wizard-modal -->
+</div><!-- /wizard-overlay -->
+
+<!-- TOAST STACK -->
+<div class="toast-stack" id="toastStack"></div>
 
 <script>
+/* ═══════════════════════════════════════════
+   CONSTANTS
+═══════════════════════════════════════════ */
 const PHONE = "556194319166";
 
+/* ═══════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════ */
 const allProducts = [
-  { id:1, emoji:"🌀", name:"Pop Fidget Hexagonal", desc:"Textura suave com pop sensorial em cada bolha. Ideal para foco e alívio de tensão.", price:39.90, badge:"🔥 Mais vendido", stars:5, cat:"fidget" },
-  { id:2, emoji:"🧊", name:"Cubo Infinito Antiestresse", desc:"6 modos de interação em um cubo compacto. Clique, gire, pressione e relaxe.", price:49.90, badge:"⭐ Destaque", stars:5, cat:"cubo" },
-  { id:3, emoji:"🐚", name:"Caracol Articulado", desc:"Corpo articulado com movimentos fluidos e hipnóticos. Sensação suave e calmante.", price:34.90, badge:null, stars:4, cat:"articulado" },
-  { id:4, emoji:"🌸", name:"Mandala Spinner", desc:"Spinner em formato de mandala com equilíbrio perfeito. Giro silencioso e duradouro.", price:29.90, badge:"🆕 Novo", stars:4, cat:"spinner" },
-  { id:5, emoji:"🐛", name:"Lagarta Sensorial", desc:"Segmentos articulados com texturas variadas em cada anel. Ótimo para crianças.", price:44.90, badge:null, stars:5, cat:"articulado" },
-  { id:6, emoji:"🐉", name:"Dragão Articulado", desc:"Dragão com corpo totalmente flexível e articulado. Um brinquedo sensorial e decorativo.", price:59.90, badge:"🎁 Presente perfeito", stars:5, cat:"articulado" },
-  { id:7, emoji:"🎯", name:"Peg Board Terapêutico", desc:"Placa de pinos coloridos para organização sensorial e foco. Usado em terapia ocupacional.", price:54.90, badge:null, stars:4, cat:"terapeutico" },
-  { id:8, emoji:"🌿", name:"Kit Zen Completo", desc:"Pop Fidget + Cubo Infinito + Spinner em caixa especial. O kit antiestresse completo.", price:99.90, badge:"💚 Kit especial", stars:5, cat:"kit" },
+  { id:1, emoji:"🌀", name:"Pop Fidget Hexagonal",     desc:"Textura suave com pop sensorial em cada bolha. Ideal para foco e alívio de tensão.", price:39.90, badge:"🔥 Mais vendido", stars:5, cat:"fidget" },
+  { id:2, emoji:"🧊", name:"Cubo Infinito Antiestresse",desc:"6 modos de interação em um cubo compacto. Clique, gire, pressione e relaxe.",         price:49.90, badge:"⭐ Destaque",    stars:5, cat:"cubo" },
+  { id:3, emoji:"🐚", name:"Caracol Articulado",        desc:"Corpo articulado com movimentos fluidos e hipnóticos. Sensação suave e calmante.",       price:34.90, badge:null,           stars:4, cat:"articulado" },
+  { id:4, emoji:"🌸", name:"Mandala Spinner",           desc:"Spinner em formato de mandala com equilíbrio perfeito. Giro silencioso e duradouro.",     price:29.90, badge:"🆕 Novo",       stars:4, cat:"spinner" },
+  { id:5, emoji:"🐛", name:"Lagarta Sensorial",         desc:"Segmentos articulados com texturas variadas em cada anel. Ótimo para crianças.",           price:44.90, badge:null,           stars:5, cat:"articulado" },
+  { id:6, emoji:"🐉", name:"Dragão Articulado",         desc:"Dragão com corpo totalmente flexível e articulado. Brinquedo sensorial e decorativo.",    price:59.90, badge:"🎁 Presente",   stars:5, cat:"articulado" },
+  { id:7, emoji:"🎯", name:"Peg Board Terapêutico",     desc:"Placa de pinos coloridos para organização sensorial e foco. Usado em T.O.",               price:54.90, badge:null,           stars:4, cat:"terapeutico" },
+  { id:8, emoji:"🌿", name:"Kit Zen Completo",          desc:"Pop Fidget + Cubo Infinito + Spinner em caixa especial. O kit antiestresse completo.",    price:99.90, badge:"💚 Kit",        stars:5, cat:"kit" },
 ];
 
 const categories = [
-  { key:"todos", label:"Todos" },
-  { key:"fidget", label:"Fidget" },
-  { key:"cubo", label:"Cubos" },
-  { key:"spinner", label:"Spinners" },
+  { key:"todos",      label:"Todos" },
+  { key:"fidget",     label:"Fidget" },
+  { key:"cubo",       label:"Cubos" },
+  { key:"spinner",    label:"Spinners" },
   { key:"articulado", label:"Articulados" },
-  { key:"terapeutico", label:"Terapêuticos" },
-  { key:"kit", label:"Kits" },
+  { key:"terapeutico",label:"Terapêuticos" },
+  { key:"kit",        label:"Kits" },
 ];
 
-let cart = [];
-let activeTab = "todos";
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+const state = {
+  cart: [],
+  activeTab: "todos",
+  checkout: {
+    step: 1,
+    nome: "", tel: "", email: "",
+    cep: "", rua: "", numero: "", complemento: "", bairro: "", cidade: "", uf: "",
+    pagamento: "",
+    orderId: ""
+  }
+};
 
-function createProductCard(p) {
-  const s = "⭐".repeat(p.stars);
-  return `<div class="product-card" onclick="">
-    <div class="product-img" style="background:linear-gradient(135deg,rgba(94,207,168,.15),rgba(184,169,245,.12))">
-      ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ""}
-      <span>${p.emoji}</span>
-    </div>
-    <div class="product-info">
-      <div class="stars">${s}</div>
-      <div class="product-name">${p.name}</div>
-      <div class="product-desc">${p.desc}</div>
-      <div class="product-footer">
-        <div class="product-price">R$ ${p.price.toFixed(2).replace(".",",")}</div>
-        <button class="add-cart" onclick="addToCart(${p.id})">🛒 Adicionar</button>
+/* ═══════════════════════════════════════════
+   CART OPERATIONS  (pure logic — exported for tests)
+═══════════════════════════════════════════ */
+function cartAdd(id) {
+  const product = allProducts.find(p => p.id === id);
+  if (!product) return;
+  const existing = state.cart.find(i => i.id === id);
+  if (existing) existing.qty++;
+  else state.cart.push({ ...product, qty: 1 });
+}
+
+function cartRemove(id) {
+  state.cart = state.cart.filter(i => i.id !== id);
+}
+
+function cartChangeQty(id, delta) {
+  const item = state.cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cartRemove(id);
+}
+
+function cartTotal() {
+  return state.cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+}
+
+function cartCount() {
+  return state.cart.reduce((sum, i) => sum + i.qty, 0);
+}
+
+function cartClear() {
+  state.cart = [];
+}
+
+/* ═══════════════════════════════════════════
+   VALIDATORS  (pure — exported for tests)
+═══════════════════════════════════════════ */
+const validators = {
+  nome:  v => v.trim().length >= 3  ? null : "Nome deve ter ao menos 3 caracteres",
+  tel:   v => /^\(\d{2}\)\s\d\s\d{4}-\d{4}$/.test(v) ? null : "Formato: (61) 9 1234-5678",
+  email: v => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? null : "E-mail inválido",
+  cep:   v => /^\d{5}-?\d{3}$/.test(v.trim()) ? null : "CEP inválido (ex: 70000-000)",
+  rua:   v => v.trim().length >= 4  ? null : "Informe a rua / avenida",
+  numero:v => v.trim().length >= 1  ? null : "Informe o número",
+  bairro:v => v.trim().length >= 2  ? null : "Informe o bairro",
+  cidade:v => v.trim().length >= 2  ? null : "Informe a cidade",
+  uf:    v => v.trim().length === 2 ? null : "Selecione o estado",
+};
+
+/* ═══════════════════════════════════════════
+   WHATSAPP PAYLOAD BUILDER  (pure — exported for tests)
+═══════════════════════════════════════════ */
+function buildCheckoutPayload(cart, checkout) {
+  const { nome, tel, email, cep, rua, numero, complemento, bairro, cidade, uf, pagamento, orderId } = checkout;
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const hasPix   = pagamento === "pix";
+  const discount = hasPix ? subtotal * 0.05 : 0;
+  const total    = subtotal - discount;
+
+  const payLabel = { pix:"PIX ✅", boleto:"Boleto Bancário", cartao:"Cartão de Crédito", retirada:"Retirada no Local" };
+  const fmt      = n => n.toFixed(2).replace(".", ",");
+  const now      = new Date();
+  const ts       = now.toLocaleDateString("pt-BR") + " às " + now.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+
+  let msg = `🛒 *NOVO PEDIDO — SensoPrint*\n`;
+  msg    += `🔖 Pedido *#${orderId}*\n\n`;
+  msg    += `━━━━━━━━━━━━━━━━━━\n`;
+  msg    += `📦 *ITENS DO PEDIDO:*\n`;
+  msg    += `━━━━━━━━━━━━━━━━━━\n`;
+
+  cart.forEach(i => {
+    msg += `• ${i.emoji} ${i.name} × ${i.qty}\n`;
+    msg += `   ↳ R$ ${fmt(i.price)} × ${i.qty} = *R$ ${fmt(i.price * i.qty)}*\n`;
+  });
+
+  msg += `\n💰 Subtotal: R$ ${fmt(subtotal)}`;
+  if (hasPix) msg += `\n🎁 Desconto PIX (5%): -R$ ${fmt(discount)}`;
+  msg += `\n━━━━━━━━━━━━━━━━━━\n`;
+  msg += `💵 *TOTAL: R$ ${fmt(total)}*\n`;
+  msg += `━━━━━━━━━━━━━━━━━━\n\n`;
+
+  msg += `👤 *DADOS DO CLIENTE:*\n`;
+  msg += `• Nome: ${nome}\n`;
+  msg += `• WhatsApp: ${tel}\n`;
+  if (email) msg += `• E-mail: ${email}\n`;
+
+  msg += `\n📍 *ENDEREÇO DE ENTREGA:*\n`;
+  msg += `• CEP: ${cep}\n`;
+  msg += `• ${rua}, ${numero}`;
+  if (complemento) msg += ` — ${complemento}`;
+  msg += `\n• Bairro: ${bairro}\n`;
+  msg += `• ${cidade} — ${uf}\n`;
+
+  msg += `\n💳 *PAGAMENTO:* ${payLabel[pagamento] || pagamento}\n\n`;
+  msg += `✅ Confirmo o pedido acima e aguardo instruções!\n`;
+  msg += `🕐 Gerado em: ${ts}`;
+
+  return msg;
+}
+
+function buildContactPayload(data) {
+  const { nome, tel, produto, cor, msg } = data;
+  let m = `📋 *CONSULTA — SensoPrint*\n\n`;
+  m    += `👤 *Cliente:* ${nome}\n`;
+  m    += `📱 *WhatsApp:* ${tel}\n`;
+  if (produto) m += `\n🎁 *Produto:* ${produto}\n`;
+  if (cor)     m += `🎨 *Cor:* ${cor}\n`;
+  if (msg)     m += `\n💬 *Mensagem:*\n${msg}\n`;
+  m    += `\n✅ Aguardo retorno para confirmação!`;
+  return m;
+}
+
+function genOrderId() {
+  return "SP-" + Date.now().toString(36).toUpperCase();
+}
+
+/* ═══════════════════════════════════════════
+   UI — CART COUNT
+═══════════════════════════════════════════ */
+function syncCartCount() {
+  const el = document.getElementById("cartCount");
+  el.textContent = cartCount();
+  el.classList.remove("bounce");
+  void el.offsetWidth; // reflow to restart animation
+  el.classList.add("bounce");
+  setTimeout(() => el.classList.remove("bounce"), 600);
+}
+
+/* ═══════════════════════════════════════════
+   UI — RENDER PRODUCTS
+═══════════════════════════════════════════ */
+function productCardHTML(p) {
+  const stars = "⭐".repeat(p.stars);
+  return `
+    <div class="product-card">
+      <div class="product-img" style="background:linear-gradient(135deg,rgba(94,207,168,.15),rgba(184,169,245,.12))">
+        ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ""}
+        <span>${p.emoji}</span>
       </div>
-    </div>
-  </div>`;
+      <div class="product-info">
+        <div class="stars">${stars}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-footer">
+          <div class="product-price">R$ ${p.price.toFixed(2).replace(".",",")}</div>
+          <button class="add-cart" onclick="handleAddToCart(event,${p.id})">🛒 Adicionar</button>
+        </div>
+      </div>
+    </div>`;
 }
 
 function renderDestaques() {
-  const featured = allProducts.filter(p => p.stars === 5).slice(0,4);
-  document.getElementById("destaquesGrid").innerHTML = featured.map(createProductCard).join("");
+  document.getElementById("destaquesGrid").innerHTML =
+    allProducts.filter(p => p.stars === 5).slice(0,4).map(productCardHTML).join("");
 }
 
 function renderCatalog() {
-  const filtered = activeTab === "todos" ? allProducts : allProducts.filter(p => p.cat === activeTab);
-  document.getElementById("catalogGrid").innerHTML = filtered.map(createProductCard).join("");
+  const list = state.activeTab === "todos" ? allProducts : allProducts.filter(p => p.cat === state.activeTab);
+  document.getElementById("catalogGrid").innerHTML = list.map(productCardHTML).join("");
 }
 
 function renderTabs() {
   document.getElementById("catalogTabs").innerHTML = categories.map(c =>
-    `<button class="tab-btn ${c.key === activeTab ? "active" : ""}" onclick="setTab('${c.key}')">${c.label}</button>`
+    `<button class="tab-btn ${c.key === state.activeTab ? "active" : ""}" onclick="setTab('${c.key}')">${c.label}</button>`
   ).join("");
 }
 
 function setTab(key) {
-  activeTab = key;
+  state.activeTab = key;
   renderTabs();
   renderCatalog();
 }
 
-function addToCart(id) {
+/* ═══════════════════════════════════════════
+   UI — ADD TO CART (with visual feedback)
+═══════════════════════════════════════════ */
+function handleAddToCart(event, id) {
+  event.stopPropagation();
+  const btn = event.currentTarget;
+  cartAdd(id);
+  syncCartCount();
+  renderDrawer();
+
+  // Button pulse
+  btn.classList.add("adding");
+  btn.textContent = "✓ Adicionado";
+  setTimeout(() => {
+    btn.classList.remove("adding");
+    btn.textContent = "🛒 Adicionar";
+  }, 900);
+
+  // Ripple
+  addRipple(event, btn);
+
   const p = allProducts.find(x => x.id === id);
-  const existing = cart.find(x => x.id === id);
-  if (existing) existing.qty++;
-  else cart.push({ ...p, qty:1 });
-  updateCartCount();
-  showToast(`${p.emoji} ${p.name} adicionado!`);
+  showToast(`${p.emoji} ${p.name} adicionado!`, "success");
 }
 
-function updateCartCount() {
-  const total = cart.reduce((s,i) => s+i.qty, 0);
-  document.getElementById("cartCount").textContent = total;
+/* ═══════════════════════════════════════════
+   UI — CART DRAWER
+═══════════════════════════════════════════ */
+function openDrawer() {
+  renderDrawer();
+  document.getElementById("drawerBackdrop").classList.add("open");
+  document.getElementById("cartDrawer").classList.add("open");
+  document.body.style.overflow = "hidden";
 }
 
-function openCart() {
-  renderCart();
-  document.getElementById("cartOverlay").classList.add("open");
+function closeDrawer() {
+  document.getElementById("drawerBackdrop").classList.remove("open");
+  document.getElementById("cartDrawer").classList.remove("open");
+  document.body.style.overflow = "";
 }
 
-function closeCart() {
-  document.getElementById("cartOverlay").classList.remove("open");
-}
+function renderDrawer() {
+  const container = document.getElementById("drawerItems");
+  const btn = document.getElementById("btnCheckout");
 
-function closeCartOutside(e) {
-  if (e.target.id === "cartOverlay") closeCart();
-}
-
-function renderCart() {
-  const container = document.getElementById("cartItems");
-  const footer = document.getElementById("cartFooter");
-  if (cart.length === 0) {
-    container.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div>Seu carrinho está vazio</div>`;
-    footer.style.display = "none";
+  if (state.cart.length === 0) {
+    container.innerHTML = `<div class="drawer-empty"><div class="drawer-empty-icon">🛒</div><p>Seu carrinho está vazio</p></div>`;
+    btn.disabled = true;
+    document.getElementById("drawerTotal").textContent = "R$ 0,00";
     return;
   }
-  container.innerHTML = cart.map(item => `
-    <div class="cart-item">
-      <div class="cart-item-emoji">${item.emoji}</div>
-      <div class="cart-item-info">
-        <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-price">R$ ${item.price.toFixed(2).replace(".",",")} × ${item.qty}</div>
+
+  container.innerHTML = state.cart.map(item => `
+    <div class="drawer-item" id="di_${item.id}">
+      <div class="drawer-item-emoji">${item.emoji}</div>
+      <div class="drawer-item-info">
+        <div class="drawer-item-name">${item.name}</div>
+        <div class="drawer-item-price">R$ ${(item.price * item.qty).toFixed(2).replace(".",",")} (${item.qty}×)</div>
       </div>
-      <div class="qty-controls">
-        <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="drawerChangeQty(${item.id},-1)">−</button>
         <span class="qty-num">${item.qty}</span>
-        <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+        <button class="qty-btn" onclick="drawerChangeQty(${item.id},1)">+</button>
       </div>
-      <button class="remove-btn" onclick="removeItem(${item.id})">🗑️</button>
-    </div>
-  `).join("");
-  const total = cart.reduce((s,i) => s + i.price * i.qty, 0);
-  document.getElementById("cartTotal").textContent = `R$ ${total.toFixed(2).replace(".",",")}`;
-  footer.style.display = "block";
+      <button class="item-remove" onclick="drawerRemove(${item.id})" title="Remover">🗑</button>
+    </div>`).join("");
+
+  document.getElementById("drawerTotal").textContent = `R$ ${cartTotal().toFixed(2).replace(".",",")}`;
+  btn.disabled = false;
 }
 
-function changeQty(id, delta) {
-  const item = cart.find(x => x.id === id);
-  if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) cart = cart.filter(x => x.id !== id);
-  updateCartCount();
-  renderCart();
+function drawerChangeQty(id, delta) {
+  cartChangeQty(id, delta);
+  syncCartCount();
+  renderDrawer();
 }
 
-function removeItem(id) {
-  cart = cart.filter(x => x.id !== id);
-  updateCartCount();
-  renderCart();
+function drawerRemove(id) {
+  cartRemove(id);
+  syncCartCount();
+  renderDrawer();
 }
 
-function checkoutWhatsApp() {
-  if (cart.length === 0) return;
-  const total = cart.reduce((s,i) => s + i.price * i.qty, 0);
-  let msg = "🛒 *PEDIDO — SensoPrint*\n\n";
-  msg += "📦 *Itens do carrinho:*\n";
-  cart.forEach(item => {
-    msg += `• ${item.emoji} ${item.name} × ${item.qty} = R$ ${(item.price * item.qty).toFixed(2).replace(".",",")}\n`;
+/* ═══════════════════════════════════════════
+   UI — CHECKOUT WIZARD
+═══════════════════════════════════════════ */
+function openCheckout() {
+  if (state.cart.length === 0) return;
+  state.checkout.step = 1;
+  state.checkout.orderId = genOrderId();
+  closeDrawer();
+  renderWizardStep();
+  document.getElementById("wizardOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeCheckout() {
+  document.getElementById("wizardOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function renderWizardStep() {
+  const s = state.checkout.step;
+
+  // Step dots
+  [1,2,3,4].forEach(n => {
+    const dot = document.getElementById(`sd${n}`);
+    dot.classList.remove("active","done");
+    if (n === s) dot.classList.add("active");
+    if (n < s)  dot.classList.add("done");
   });
-  msg += `\n💰 *Total: R$ ${total.toFixed(2).replace(".",",")}*`;
-  msg += "\n\n🚀 Gostaria de finalizar este pedido!";
-  const url = `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;
-  window.open(url, "_blank");
+
+  // Connectors
+  [1,2,3].forEach(n => {
+    document.getElementById(`sc${n}`).classList.toggle("done", n < s);
+  });
+
+  // Step content
+  document.querySelectorAll(".step-content").forEach((el,i) => {
+    el.classList.toggle("active", i+1 === s);
+  });
+
+  // Wizard title
+  const titles = ["","👤 Seus Dados","📍 Endereço","💳 Pagamento","✅ Confirmação"];
+  document.getElementById("wizardTitle").textContent = titles[s];
+
+  // Render summary on step 4
+  if (s === 4) renderSummary();
+
+  // Scroll wizard to top
+  document.getElementById("wizardModal").scrollTop = 0;
 }
 
-function enviarWhatsApp() {
-  const nome = document.getElementById("fNome").value.trim();
-  const tel = document.getElementById("fTel").value.trim();
-  const produto = document.getElementById("fProduto").value;
-  const cor = document.getElementById("fCor").value.trim();
-  const msg_extra = document.getElementById("fMsg").value.trim();
-  if (!nome) { showToast("⚠️ Informe seu nome"); return; }
-  if (!produto) { showToast("⚠️ Selecione um produto"); return; }
-  let msg = `📋 *RELATÓRIO DE PEDIDO — SensoPrint*\n\n`;
-  msg += `👤 *Cliente:* ${nome}\n`;
-  if (tel) msg += `📱 *WhatsApp:* ${tel}\n`;
-  msg += `\n🎁 *Produto desejado:* ${produto}\n`;
-  if (cor) msg += `🎨 *Cor preferida:* ${cor}\n`;
-  if (msg_extra) msg += `\n💬 *Detalhes:*\n${msg_extra}\n`;
-  msg += `\n✅ Aguardo retorno para confirmação e valores!`;
-  const url = `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;
-  window.open(url, "_blank");
+function nextStep() {
+  if (!validateStep(state.checkout.step)) return;
+  collectStepData(state.checkout.step);
+  if (state.checkout.step === 4) { sendToWhatsApp(); return; }
+  state.checkout.step++;
+  renderWizardStep();
 }
 
-function showToast(text) {
-  const t = document.getElementById("toast");
-  t.textContent = text;
-  t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), 2800);
+function prevStep() {
+  if (state.checkout.step === 1) { closeCheckout(); openDrawer(); return; }
+  state.checkout.step--;
+  renderWizardStep();
 }
 
-// INIT
+function collectStepData(step) {
+  if (step === 1) {
+    state.checkout.nome  = document.getElementById("f_nome").value.trim();
+    state.checkout.tel   = document.getElementById("f_tel").value.trim();
+    state.checkout.email = document.getElementById("f_email").value.trim();
+  }
+  if (step === 2) {
+    state.checkout.cep         = document.getElementById("f_cep").value.trim();
+    state.checkout.rua         = document.getElementById("f_rua").value.trim();
+    state.checkout.numero      = document.getElementById("f_numero").value.trim();
+    state.checkout.complemento = document.getElementById("f_complemento").value.trim();
+    state.checkout.bairro      = document.getElementById("f_bairro").value.trim();
+    state.checkout.cidade      = document.getElementById("f_cidade").value.trim();
+    state.checkout.uf          = document.getElementById("f_uf").value.trim();
+  }
+}
+
+/* ═══════════════════════════════════════════
+   VALIDATION
+═══════════════════════════════════════════ */
+function setFieldState(inputId, errorId, error) {
+  const input = document.getElementById(inputId);
+  const hint  = document.getElementById(errorId);
+  if (!input) return !error;
+  if (error) {
+    input.classList.remove("valid"); input.classList.add("invalid");
+    if (hint) { hint.textContent = error; hint.classList.add("show"); }
+    return false;
+  }
+  input.classList.remove("invalid"); input.classList.add("valid");
+  if (hint) hint.classList.remove("show");
+  return true;
+}
+
+function validateStep(step) {
+  let ok = true;
+
+  if (step === 1) {
+    const fields = [
+      ["f_nome",  "e_nome",  "nome"],
+      ["f_tel",   "e_tel",   "tel"],
+      ["f_email", "e_email", "email"],
+    ];
+    fields.forEach(([fid, eid, key]) => {
+      const val = document.getElementById(fid)?.value || "";
+      const err = validators[key]?.(val) ?? null;
+      if (!setFieldState(fid, eid, err)) ok = false;
+    });
+  }
+
+  if (step === 2) {
+    const fields = [
+      ["f_cep",    "e_cep",    "cep"],
+      ["f_rua",    "e_rua",    "rua"],
+      ["f_numero", "e_numero", "numero"],
+      ["f_bairro", "e_bairro", "bairro"],
+      ["f_cidade", "e_cidade", "cidade"],
+      ["f_uf",     "e_uf",     "uf"],
+    ];
+    fields.forEach(([fid, eid, key]) => {
+      const val = document.getElementById(fid)?.value || "";
+      const err = validators[key]?.(val) ?? null;
+      if (!setFieldState(fid, eid, err)) ok = false;
+    });
+  }
+
+  if (step === 3) {
+    if (!state.checkout.pagamento) {
+      const hint = document.getElementById("e_pag");
+      hint.textContent = "Selecione uma forma de pagamento";
+      hint.classList.add("show");
+      ok = false;
+    }
+  }
+
+  if (!ok && step < 3) showToast("Corrija os campos destacados", "error");
+  return ok;
+}
+
+/* ═══════════════════════════════════════════
+   REAL-TIME VALIDATION BINDINGS
+═══════════════════════════════════════════ */
+function bindLiveValidation() {
+  const pairs = [
+    ["f_nome","e_nome","nome"], ["f_tel","e_tel","tel"], ["f_email","e_email","email"],
+    ["f_cep","e_cep","cep"], ["f_rua","e_rua","rua"], ["f_numero","e_numero","numero"],
+    ["f_bairro","e_bairro","bairro"], ["f_cidade","e_cidade","cidade"],
+  ];
+  pairs.forEach(([fid, eid, key]) => {
+    const el = document.getElementById(fid);
+    if (!el) return;
+    el.addEventListener("blur", () => {
+      const err = validators[key]?.(el.value) ?? null;
+      setFieldState(fid, eid, err);
+    });
+    if (key === "tel")  el.addEventListener("input", maskPhone);
+    if (key === "cep")  el.addEventListener("input", maskCEP);
+  });
+
+  // UF select
+  const uf = document.getElementById("f_uf");
+  if (uf) {
+    uf.addEventListener("change", () => {
+      uf.classList.toggle("has-value", !!uf.value);
+      setFieldState("f_uf", "e_uf", validators.uf(uf.value));
+    });
+  }
+}
+
+function maskPhone(e) {
+  let v = e.target.value.replace(/\D/g,"").slice(0,11);
+  if (v.length >= 2)  v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+  if (v.length >= 11) v = v.slice(0,9) + v.slice(9,13).replace(/(\d{4})(\d{4})/, "$1-$2");
+  else if (v.length > 9) v = v.slice(0,9) + "-" + v.slice(9);
+  e.target.value = v;
+}
+
+function maskCEP(e) {
+  let v = e.target.value.replace(/\D/g,"").slice(0,8);
+  if (v.length > 5) v = v.slice(0,5) + "-" + v.slice(5);
+  e.target.value = v;
+}
+
+// Contact form masking
+function bindContactMasks() {
+  const tel = document.getElementById("fc_tel");
+  if (tel) tel.addEventListener("input", maskPhone);
+  // Float-select for fc_produto
+  const sel = document.getElementById("fc_produto");
+  if (sel) sel.addEventListener("change", () => sel.classList.toggle("has-value", !!sel.value));
+}
+
+/* ═══════════════════════════════════════════
+   PAYMENT SELECTION
+═══════════════════════════════════════════ */
+function selectPayment(key, el) {
+  document.querySelectorAll(".payment-opt").forEach(o => o.classList.remove("selected"));
+  el.classList.add("selected");
+  state.checkout.pagamento = key;
+  const hint = document.getElementById("e_pag");
+  if (hint) hint.classList.remove("show");
+}
+
+/* ═══════════════════════════════════════════
+   CEP LOOKUP (ViaCEP)
+═══════════════════════════════════════════ */
+async function lookupCEP() {
+  const raw = document.getElementById("f_cep").value.replace(/\D/g,"");
+  if (raw.length !== 8) { showToast("CEP deve ter 8 dígitos", "error"); return; }
+
+  const btn = document.getElementById("cepBtn");
+  btn.classList.add("loading");
+
+  try {
+    const res  = await fetch(`https://viacep.com.br/ws/${raw}/json/`);
+    const data = await res.json();
+    if (data.erro) { showToast("CEP não encontrado", "error"); return; }
+
+    const map = { f_rua:data.logradouro, f_bairro:data.bairro, f_cidade:data.localidade, f_uf:data.uf };
+    Object.entries(map).forEach(([id,val]) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.value = val || "";
+      if (el.tagName === "SELECT") el.classList.toggle("has-value", !!el.value);
+      else { el.classList.remove("invalid"); if (val) el.classList.add("valid"); }
+    });
+
+    document.getElementById("f_numero").focus();
+    showToast("✓ Endereço preenchido!", "success");
+  } catch {
+    showToast("Erro ao buscar CEP — verifique sua conexão", "error");
+  } finally {
+    btn.classList.remove("loading");
+  }
+}
+
+/* ═══════════════════════════════════════════
+   ORDER SUMMARY RENDER
+═══════════════════════════════════════════ */
+function renderSummary() {
+  const co = state.checkout;
+  const subtotal = cartTotal();
+  const hasPix   = co.pagamento === "pix";
+  const discount = hasPix ? subtotal * 0.05 : 0;
+  const total    = subtotal - discount;
+  const fmt      = n => n.toFixed(2).replace(".",",");
+  const payLabel = { pix:"PIX", boleto:"Boleto", cartao:"Cartão", retirada:"Retirada" };
+
+  let html = `
+    <div class="summary-badge">🔖 Pedido <span class="summary-order-id">#${co.orderId}</span></div>`;
+
+  state.cart.forEach(i => {
+    html += `
+      <div class="summary-line">
+        <span class="summary-line-name">${i.emoji} ${i.name} × ${i.qty}</span>
+        <span class="summary-line-val">R$ ${fmt(i.price * i.qty)}</span>
+      </div>`;
+  });
+
+  if (hasPix) html += `
+    <div class="summary-line summary-discount">
+      <span class="summary-line-name">🎁 Desconto PIX (5%)</span>
+      <span class="summary-line-val">−R$ ${fmt(discount)}</span>
+    </div>`;
+
+  html += `
+    <div class="summary-total-row">
+      <span class="summary-total-lbl">Total</span>
+      <span class="summary-total-val">R$ ${fmt(total)}</span>
+    </div>
+    <div class="summary-info-box">
+      <div class="summary-info-title">👤 ${co.nome}</div>
+      <div class="summary-info-body">
+        📱 ${co.tel}${co.email ? `<br>✉️ ${co.email}` : ""}<br>
+        📍 ${co.rua}, ${co.numero}${co.complemento ? ` — ${co.complemento}` : ""}<br>
+        ${co.bairro}, ${co.cidade} — ${co.uf} · CEP ${co.cep}<br>
+        💳 ${payLabel[co.pagamento] || co.pagamento}${hasPix ? '<span class="pix-tag">5% off</span>' : ""}
+      </div>
+    </div>`;
+
+  document.getElementById("summaryContent").innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════
+   SEND TO WHATSAPP
+═══════════════════════════════════════════ */
+function sendToWhatsApp() {
+  const payload = buildCheckoutPayload(state.cart, state.checkout);
+  window.open(`https://wa.me/${PHONE}?text=${encodeURIComponent(payload)}`, "_blank");
+  closeCheckout();
+  cartClear();
+  syncCartCount();
+  showToast("🚀 Pedido enviado! Aguarde nosso contato.", "success");
+}
+
+/* ═══════════════════════════════════════════
+   CONTACT FORM WHATSAPP
+═══════════════════════════════════════════ */
+function enviarContatoWhatsApp(event) {
+  event.preventDefault();
+  const nome    = document.getElementById("fc_nome").value.trim();
+  const tel     = document.getElementById("fc_tel").value.trim();
+  const produto = document.getElementById("fc_produto").value;
+  const cor     = document.getElementById("fc_cor").value.trim();
+  const msg     = document.getElementById("fc_msg").value.trim();
+
+  let ok = true;
+  if (!nome) {
+    setFieldState("fc_nome","ec_nome","Nome obrigatório"); ok = false;
+  } else {
+    const err = validators.nome(nome);
+    if (!setFieldState("fc_nome","ec_nome",err)) ok = false;
+  }
+  if (!tel) {
+    setFieldState("fc_tel","ec_tel","WhatsApp obrigatório"); ok = false;
+  } else {
+    const err = validators.tel(tel);
+    if (!setFieldState("fc_tel","ec_tel",err)) ok = false;
+  }
+  if (!msg && !produto) {
+    const h = document.getElementById("ec_msg");
+    h.textContent = "Informe a mensagem ou selecione um produto";
+    h.classList.add("show"); ok = false;
+  } else {
+    document.getElementById("ec_msg").classList.remove("show");
+  }
+  if (!ok) { showToast("Preencha os campos obrigatórios", "error"); return; }
+
+  const payload = buildContactPayload({ nome, tel, produto, cor, msg });
+  window.open(`https://wa.me/${PHONE}?text=${encodeURIComponent(payload)}`, "_blank");
+  showToast("✓ Abrindo WhatsApp...", "success");
+}
+
+/* ═══════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════ */
+function showToast(text, type = "") {
+  const stack = document.getElementById("toastStack");
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.textContent = text;
+  stack.appendChild(toast);
+  void toast.offsetWidth;
+  toast.classList.add("show");
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 400);
+  }, 2800);
+}
+
+/* ═══════════════════════════════════════════
+   RIPPLE EFFECT
+═══════════════════════════════════════════ */
+function addRipple(event, el) {
+  const rect = el.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  const x    = event.clientX - rect.left  - size / 2;
+  const y    = event.clientY - rect.top   - size / 2;
+  const wave = document.createElement("span");
+  wave.className = "ripple-wave";
+  wave.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px`;
+  el.appendChild(wave);
+  wave.addEventListener("animationend", () => wave.remove());
+}
+
+// Global ripple for whatsapp / primary buttons
+document.addEventListener("click", e => {
+  const btn = e.target.closest(".btn-primary, .btn-whatsapp, .btn-checkout, .cart-btn");
+  if (btn) addRipple(e, btn);
+});
+
+/* ═══════════════════════════════════════════
+   KEYBOARD: close on Escape
+═══════════════════════════════════════════ */
+document.addEventListener("keydown", e => {
+  if (e.key !== "Escape") return;
+  if (document.getElementById("wizardOverlay").classList.contains("open")) closeCheckout();
+  else closeDrawer();
+});
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
 renderDestaques();
 renderTabs();
 renderCatalog();
+bindLiveValidation();
+bindContactMasks();
 </script>
 </body>
 </html>

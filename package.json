@@ -1,0 +1,13 @@
+{
+  "name": "sensoprint",
+  "version": "1.0.0",
+  "description": "Loja de brinquedos sensoriais 3D — SensoPrint",
+  "scripts": {
+    "test":     "node toy3d.test.js",
+    "test:vt":  "npx vitest run toy3d.test.js",
+    "test:jest":"npx jest toy3d.test.js"
+  },
+  "devDependencies": {
+    "vitest": "^1.0.0"
+  }
+}
