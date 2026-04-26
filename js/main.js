@@ -84,5 +84,5 @@ renderTabs();
 renderCatalog();
 bindLiveValidation();
 bindContactMasks();
-initHeroCanvas();
-initCardTilt();
+initSpline();      /* Spline 3D hero background */
+initCardTilt();    /* 3D perspective tilt on product cards */
