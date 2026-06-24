@@ -1,7 +1,0 @@
-<svg viewBox="0 0 105 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="105" height="32">
-  <!-- Aether wordmark -->
-  <path d="M12,7 C8,7 4,11 4,16 C4,21 8,25 12,25 C14,25 16,24 17.5,22.5" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-  <path d="M12,7 C16,7 20,11 20,16 C20,18 19,20 17.5,21.5" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-  <line x1="4" y1="16" x2="20" y2="16" stroke="white" stroke-width="1.5"/>
-  <text x="26" y="21" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="white" letter-spacing="-0.2">Aether</text>
-</svg>

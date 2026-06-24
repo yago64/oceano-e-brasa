@@ -1,13 +1,27 @@
 {
-  "name": "sensoprint",
-  "version": "1.0.0",
-  "description": "Loja de brinquedos sensoriais 3D — SensoPrint",
+  "name": "restaurante-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "test":     "node toy3d.test.js",
-    "test:vt":  "npx vitest run toy3d.test.js",
-    "test:jest":"npx jest toy3d.test.js"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
-    "vitest": "^1.0.0"
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
+    "eslint": "^10.5.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "globals": "^17.6.0",
+    "vite": "^8.1.0"
   }
 }
