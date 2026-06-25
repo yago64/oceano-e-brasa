@@ -46,7 +46,7 @@ export default function App() {
       <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 40px", borderBottom: "1px solid #1e293b", backgroundColor: "#0f172a", sticky: "top" }}>
         
         <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-          <img src="LINK_DA_SUA_LOGO_AQUI" alt="Logo Oceano e Brasa" style={{ height: "50px", borderRadius: "8px" }} />
+          <img src="https://www.pngegg.com/pt/png-wvgsq" alt="Logo Oceano e Brasa" style={{ height: "50px", borderRadius: "8px" }} />
           <h1 style={{ color: "#f59e0b", margin: 0, fontSize: "1.8rem" }}>Oceano & Brasa</h1>
         </div>
         
