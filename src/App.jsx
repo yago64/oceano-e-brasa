@@ -45,22 +45,7 @@ export default function App() {
       
       <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 40px", borderBottom: "1px solid #1e293b", backgroundColor: "#0f172a", sticky: "top" }}>
         
-        <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-          {/* Ícone de Onda em SVG - Customizado com a cor do tema */}
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="#f59e0b" 
-            strokeWidth="2.5" 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            style={{ width: "40px", height: "40px" }}
-          >
-            <path d="M2 6c.6 0 1.2.2 1.6.6L6.2 9.2c.8.8 2 .8 2.8 0l2.6-2.6c.8-.8 2-.8 2.8 0l2.6 2.6c.8.8 2 .8 2.8 0l2.6-2.6c.4-.4 1-.6 1.6-.6" />
-            <path d="M2 12c.6 0 1.2.2 1.6.6l2.6 2.6c.8.8 2 .8 2.8 0l2.6-2.6c.8-.8 2-.8 2.8 0l2.6 2.6c.8.8 2 .8 2.8 0l2.6-2.6c.4-.4 1-.6 1.6-.6" />
-            <path d="M2 18c.6 0 1.2.2 1.6.6l2.6 2.6c.8.8 2 .8 2.8 0l2.6-2.6c.8-.8 2-.8 2.8 0l2.6 2.6c.8.8 2 .8 2.8 0l2.6-2.6c.4-.4 1-.6 1.6-.6" />
-          </svg>
+        <div>
           <h1 style={{ color: "#f59e0b", margin: 0, fontSize: "1.8rem" }}>Oceano & Brasa</h1>
         </div>
         
